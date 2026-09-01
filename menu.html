@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Kangra Dham Co. 7-Day Rotating Menu - Interactive calendar, side items, and retail Himachali products. Plan your visit by your favorite Madra!">
+    <title>The Menu | The Kangra Dham Co. — 7-Day Rotating Dham</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B85B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kangra Dham">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/917011376087?text=Hi!%20I'd%20like%20to%20order%20from%20Kangra%20Dham%20Express" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Order / Enquire</span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍛</span>
+                <div class="logo-text">
+                    <span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span>
+                </div>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="locations.html">Locations</a></li>
+                <li><a href="catering.html">Catering</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="corporate.html">Corporate</a></li>
+                <li><a href="stories.html">Stories</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="order.html" class="btn-nav">Order Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>The Menu</h1>
+        <p>7-Day Rotating Unlimited Dham Thali • No Onion • No Garlic • Pure Ghee</p>
+    </section>
+
+    <!-- Interactive 7-Day Calendar -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">7-Day Rotating Dham Schedule</h2>
+            <p class="section-subtitle">Tap a day to see what's cooking — plan your visit by your favourite Madra!</p>
+            
+            <!-- Day Tabs -->
+            <div class="menu-calendar-tabs" id="menuCalendar">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Day Detail -->
+            <div class="menu-day-detail" id="menuDetail">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Fixed Thali Inclusions -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Every Thali Includes</h2>
+            <p class="section-subtitle">Served in a heavy steel compartment plate — unlimited refills</p>
+            <div class="fixed-items-grid">
+                <div class="fixed-item">
+                    <span class="fixed-item-emoji">🍚</span>
+                    <h4>Steamed Basmati Rice</h4>
+                    <p>The canvas for all Dham gravies</p>
+                </div>
+                <div class="fixed-item">
+                    <span class="fixed-item-emoji">🍮</span>
+                    <h4>Chhanna / Meetha Bhat</h4>
+                    <p>Sweet rice with raisins & dry fruits</p>
+                </div>
+                <div class="fixed-item">
+                    <span class="fixed-item-emoji">🥣</span>
+                    <h4>Kadi / Palda</h4>
+                    <p>Light, spiced yogurt-based curry</p>
+                </div>
+                <div class="fixed-item">
+                    <span class="fixed-item-emoji">🧈</span>
+                    <h4>Desi Ghee Drizzle</h4>
+                    <p>Authentic touch added at the counter</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Side Menu (A La Carte) -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Signature A La Carte & Sides</h2>
+            <p class="section-subtitle">Available every day — boost your meal with these Pahadi favourites</p>
+            <div class="side-menu-grid" id="sideMenuGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Retail Shelf -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">🏪 Take Himachal Home</h2>
+            <p class="section-subtitle">Retail counter — authentic Pahadi products to enjoy at home</p>
+            <div class="retail-grid" id="retailGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Know What's Cooking Today?</h2>
+            <p>Check today's Madra, order via WhatsApp, or simply walk in for the freshest Kangra Dham.</p>
+            <div class="cta-buttons">
+                <a href="index.html#todaysMenu" class="btn btn-primary btn-large">Today's Menu</a>
+                <a href="https://wa.me/917011376087?text=Hi!%20What's%20today's%20Dham%20menu?" target="_blank" class="btn btn-whatsapp btn-large">
+                    <i class="fab fa-whatsapp"></i> Ask on WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon">🍛</span>
+                        <div class="logo-text">
+                            <span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span>
+                        </div>
+                    </a>
+                    <p>Authentic Kangra Dham. Fast. Affordable. Everyday.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="menu.html">7-Day Menu</a></li>
+                        <li><a href="about.html">Our Story</a></li>
+                        <li><a href="locations.html">Locations</a></li>
+                        <li><a href="catering.html">Catering</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="order.html">Online Ordering</a></li>
+                        <li><a href="catering.html">Corporate Catering</a></li>
+                        <li><a href="catering.html#subscriptions">Meal Subscriptions</a></li>
+                        <li><a href="catering.html#events">Event Catering</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Visit Us</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Sector 62, Noida, UP 201301</p>
+                    <p><i class="fas fa-phone"></i> +91 7011376087</p>
+                    <p><i class="fab fa-whatsapp"></i> +91 7011376087</p>
+                    <p><i class="fas fa-envelope"></i> kapil8583@gmail.com</p>
+                    <p><i class="fas fa-clock"></i> Lunch: 12–3:30 PM | Snacks: 4:30–6:30 PM | Dinner: 7:30–10 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Kangra Dham Co.. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/security.js"></script>
+    <script src="js/menu-data.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Service Worker & Analytics Tracking -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW failed:', err));
+            });
+        }
+        document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'whatsapp_click', {
+                        event_category: 'engagement',
+                        event_label: link.closest('section')?.id || 'floating'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

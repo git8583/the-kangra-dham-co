@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Kangra Dham Co. Catering - Corporate lunch plans, event catering, group bookings, and meal subscriptions.">
+    <title>Catering & Corporate Orders | The Kangra Dham Co.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B85B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kangra Dham">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/917011376087?text=Hi!%20Corporate%20catering%20enquiry%20(Sector%20137)" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Bulk / Catering Enquiry</span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍛</span>
+                <div class="logo-text">
+                    <span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span>
+                </div>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">Our Heritage</a></li>
+                <li><a href="menu.html">The Menu</a></li>
+                <li><a href="locations.html">Find Us</a></li>
+                <li><a href="catering.html" class="active">Catering</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="corporate.html">Corporate</a></li>
+                <li><a href="stories.html">Stories</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="order.html" class="btn-nav">Order Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Catering & Corporate Orders</h1>
+        <p>Authentic Kangra Dham for Sector 137/142 offices, events, and celebrations</p>
+    </section>
+
+    <!-- Catering Services -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Catering Services</h2>
+            <p class="section-subtitle">From daily office lunches to grand celebrations — we cater it all</p>
+            
+            <div class="catering-grid">
+                <div class="catering-card" data-animate>
+                    <div class="icon">🏢</div>
+                    <h3>Corporate Lunch Plans</h3>
+                    <p>Daily fresh Dham thalis delivered to your office. Perfect for IT companies, startups, and corporate teams.</p>
+                    <ul>
+                        <li>Daily delivery to your office</li>
+                        <li>Customisable menu options</li>
+                        <li>Bulk pricing discounts</li>
+                        <li>Monthly billing available</li>
+                    </ul>
+                    <a href="#enquiry" class="btn btn-primary btn-small">Enquire Now</a>
+                </div>
+
+                <div class="catering-card" data-animate>
+                    <div class="icon">👥</div>
+                    <h3>Group Bookings</h3>
+                    <p>Planning a team lunch or group outing? Book our space for groups of 10+ people.</p>
+                    <ul>
+                        <li>Reserved seating area</li>
+                        <li>Pre-ordered thalis ready on arrival</li>
+                        <li>Special group pricing</li>
+                        <li>Team-building lunch packages</li>
+                    </ul>
+                    <a href="#enquiry" class="btn btn-primary btn-small">Book Now</a>
+                </div>
+
+                <div class="catering-card" data-animate>
+                    <div class="icon">🎉</div>
+                    <h3 id="events">Weekend Dham Events</h3>
+                    <p>Host an authentic Dham experience for birthdays, anniversaries, or community gatherings.</p>
+                    <ul>
+                        <li>Full traditional Dham setup</li>
+                        <li>Served on pattal (leaf plates)</li>
+                        <li>Authentic Boti-style cooking</li>
+                        <li>50–500 person capacity</li>
+                    </ul>
+                    <a href="#enquiry" class="btn btn-primary btn-small">Plan Event</a>
+                </div>
+
+                <div class="catering-card" data-animate>
+                    <div class="icon">📦</div>
+                    <h3>Bulk Orders</h3>
+                    <p>Large orders for offices, events, or community functions. Minimum 25 thalis.</p>
+                    <ul>
+                        <li>Minimum 25 thalis</li>
+                        <li>Packaging included</li>
+                        <li>Delivery available</li>
+                        <li>Advance booking required</li>
+                    </ul>
+                    <a href="#enquiry" class="btn btn-primary btn-small">Order Bulk</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Corporate Subscription -->
+    <section class="section section-alt" id="subscriptions">
+        <div class="container">
+            <h2 class="section-title">Corporate Lunch Subscription</h2>
+            <p class="section-subtitle">Hassle-free daily meals for your office team</p>
+            
+            <div class="catering-grid">
+                <div class="catering-card" data-animate>
+                    <div class="icon">📅</div>
+                    <h3>Daily Plan</h3>
+                    <p>Fresh thalis delivered daily to your workplace.</p>
+                    <ul>
+                        <li>Minimum 10 thalis/day</li>
+                        <li>Choice of Mini or Full Dham</li>
+                        <li>Fixed delivery time</li>
+                        <li>Pay weekly or monthly</li>
+                    </ul>
+                    <span class="price">From ₹179/thali</span>
+                </div>
+
+                <div class="catering-card" data-animate>
+                    <div class="icon">📆</div>
+                    <h3>Weekly Plan</h3>
+                    <p>5-day lunch plan with rotating menu for variety.</p>
+                    <ul>
+                        <li>Monday to Friday delivery</li>
+                        <li>Rotating weekly menu</li>
+                        <li>Skip days flexibility</li>
+                        <li>Team dashboard access</li>
+                    </ul>
+                    <span class="price">From ₹169/thali</span>
+                </div>
+
+                <div class="catering-card" data-animate>
+                    <div class="icon">🗓️</div>
+                    <h3>Monthly Plan</h3>
+                    <p>Best value — monthly subscription with maximum savings.</p>
+                    <ul>
+                        <li>22-26 working days</li>
+                        <li>Maximum discount</li>
+                        <li>Priority delivery slot</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                    <span class="price">From ₹159/thali</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enquiry Form -->
+    <section class="section" id="enquiry">
+        <div class="container" style="max-width: 700px;">
+            <h2 class="section-title">Catering Enquiry</h2>
+            <p class="section-subtitle">Tell us about your requirements and we'll get back within 2 hours</p>
+            
+            <form class="contact-form" id="cateringForm" data-animate>
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company / Organisation</label>
+                    <input type="text" id="company" name="company" placeholder="Company name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="+91 7011376087">
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Required *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <option value="corporate-lunch">Corporate Lunch Plan</option>
+                        <option value="group-booking">Group Booking</option>
+                        <option value="event-catering">Event Catering</option>
+                        <option value="bulk-order">Bulk Order</option>
+                        <option value="subscription">Monthly Subscription</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Number of People</label>
+                    <input type="number" id="guests" name="guests" placeholder="e.g., 50">
+                </div>
+                <div class="form-group">
+                    <label for="message">Additional Details</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your requirements, preferred dates, dietary needs, etc."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Enquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <span class="logo-icon">🍛</span>
+                        <div class="logo-text">
+                            <span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span>
+                        </div>
+                    </a>
+                    <p>Authentic Kangra Dham. Fast. Affordable. Everyday.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="locations.html">Locations</a></li>
+                        <li><a href="catering.html">Catering</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="order.html">Online Ordering</a></li>
+                        <li><a href="catering.html">Corporate Catering</a></li>
+                        <li><a href="catering.html#subscriptions">Meal Subscriptions</a></li>
+                        <li><a href="catering.html#events">Event Catering</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-phone"></i> +91 7011376087</p>
+                    <p><i class="fab fa-whatsapp"></i> +91 7011376087</p>
+                    <p><i class="fas fa-envelope"></i> kapil8583@gmail.com</p>
+                    <p><i class="fas fa-clock"></i> Lunch: 12–3:30 PM | Snacks: 4:30–6:30 PM | Dinner: 7:30–10 PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Kangra Dham Co.. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/security.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Service Worker & Analytics Tracking -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW failed:', err));
+            });
+        }
+        document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'whatsapp_click', {
+                        event_category: 'engagement',
+                        event_label: link.closest('section')?.id || 'floating'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
