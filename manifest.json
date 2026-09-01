@@ -2,7 +2,7 @@
   "name": "The Kangra Dham Co.",
   "short_name": "Kangra Dham",
   "description": "Authentic Himachali Kangra Dham — Tradition, Taste & Emotion. Daily rotating thali, slow-cooked in brass Charotis.",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#FAF8F5",
   "theme_color": "#B85B35",
@@ -58,13 +58,13 @@
     {
       "name": "Today's Menu",
       "short_name": "Menu",
-      "url": "/index.html#todays-menu",
+      "url": "./index.html#todays-menu",
       "icons": [{"src": "icons/icon-96.png", "sizes": "96x96"}]
     },
     {
       "name": "Full Week Menu",
       "short_name": "Week",
-      "url": "/menu.html",
+      "url": "./menu.html",
       "icons": [{"src": "icons/icon-96.png", "sizes": "96x96"}]
     }
   ]

@@ -2,19 +2,19 @@
 // Provides offline support and caching
 
 const CACHE_NAME = 'kangra-dham-v1';
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = 'offline.html';
 
 const PRECACHE_URLS = [
-    '/',
-    '/index.html',
-    '/menu.html',
-    '/about.html',
-    '/css/style.css',
-    '/js/main.js',
-    '/js/menu-data.js',
-    '/manifest.json',
-    '/icons/icon-192.png',
-    '/icons/icon-512.png'
+    './',
+    'index.html',
+    'menu.html',
+    'about.html',
+    'css/style.css',
+    'js/main.js',
+    'js/menu-data.js',
+    'manifest.json',
+    'icons/icon-192.png',
+    'icons/icon-512.png'
 ];
 
 // Install: precache essential files
