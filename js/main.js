@@ -2,7 +2,8 @@
 // Kangra Dham Express - Main JavaScript
 // ========================================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    if (window.menuDataReady) await window.menuDataReady;
     // Mobile Navigation Toggle
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
@@ -220,27 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
     animatedElements.forEach(el => observer.observe(el));
-
-    // ========================================
-    // Form handling
-    // ========================================
-    ['contactForm', 'cateringForm'].forEach(formId => {
-        const form = document.getElementById(formId);
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const btn = form.querySelector('button[type="submit"]');
-                const originalText = btn.textContent;
-                btn.textContent = '✓ Sent Successfully!';
-                btn.style.background = '#2E7D32';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                    form.reset();
-                }, 3000);
-            });
-        }
-    });
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

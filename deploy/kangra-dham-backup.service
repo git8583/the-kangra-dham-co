@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up The Kangra Dham Co. database
+
+[Service]
+Type=oneshot
+ExecStart=/opt/kangra-dham/current/deploy/backup.sh

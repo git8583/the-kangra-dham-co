@@ -1,7 +1,7 @@
 // The Kangra Dham Co. - Service Worker
 // Provides offline support and caching
 
-const CACHE_NAME = 'kangra-dham-v1';
+const CACHE_NAME = 'kangra-dham-v3';
 const OFFLINE_URL = 'offline.html';
 
 const PRECACHE_URLS = [
@@ -45,6 +45,9 @@ self.addEventListener('fetch', event => {
 
     // Skip non-GET requests
     if (request.method !== 'GET') return;
+
+    // API responses may be private or time-sensitive; never persist them in the PWA cache.
+    if (url.origin === location.origin && url.pathname.startsWith('/api/')) return;
 
     // Skip external requests (CDNs, analytics, etc.)
     if (url.origin !== location.origin) {

@@ -111,17 +111,26 @@ const MENU_DATA = {
     ]
 };
 
-// Get current day (or admin override)
+let serverMenuOverride = null;
+
+window.menuDataReady = fetch('api/menu', {
+    headers: { Accept: 'application/json' }
+}).then(response => {
+    if (!response.ok) throw new Error('Menu API unavailable');
+    return response.json();
+}).then(({ menu, override }) => {
+    Object.assign(MENU_DATA, menu);
+    serverMenuOverride = override;
+}).catch(error => {
+    console.warn('Using bundled menu data:', error.message);
+});
+
+// Get current day (or server-side admin override)
 function getCurrentMenuDay() {
-    // Console override (for developers)
     if (typeof window.MENU_DAY_OVERRIDE === 'number') {
         return window.MENU_DAY_OVERRIDE;
     }
-    // Admin panel override (stored in localStorage)
-    const stored = localStorage.getItem('menuDayOverride');
-    if (stored !== null) {
-        return parseInt(stored);
-    }
+    if (Number.isInteger(serverMenuOverride)) return serverMenuOverride;
     return new Date().getDay();
 }
 

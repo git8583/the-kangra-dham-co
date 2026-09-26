@@ -1,0 +1,24 @@
+[Unit]
+Description=The Kangra Dham Co. web application
+After=network.target
+
+[Service]
+Type=simple
+User=kangradham
+Group=kangradham
+WorkingDirectory=/opt/kangra-dham/current
+EnvironmentFile=/etc/kangra-dham.env
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/kangra-dham
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

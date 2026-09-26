@@ -3,149 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel — The Kangra Dham Co.</title>
     <meta name="robots" content="noindex, nofollow">
+    <title>Admin — The Kangra Dham Co.</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .admin-container { max-width: 600px; margin: 2rem auto; padding: 2rem; }
-        .admin-header { text-align: center; margin-bottom: 2rem; }
-        .admin-header h1 { font-family: var(--font-heading); color: var(--color-primary); }
-        .admin-login { background: var(--color-card); padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
-        .admin-login input { width: 100%; padding: 0.75rem 1rem; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
-        .admin-login input:focus { border-color: var(--color-primary); outline: none; }
-        .admin-panel { display: none; }
-        .admin-panel.active { display: block; }
-        .day-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
-        .day-btn { padding: 1rem; border: 2px solid #ddd; border-radius: 12px; background: white; cursor: pointer; text-align: center; transition: all 0.2s; }
-        .day-btn:hover { border-color: var(--color-primary); background: #fff5f0; }
-        .day-btn.active { border-color: var(--color-primary); background: var(--color-primary); color: white; }
-        .day-btn .day-name { font-weight: 700; font-size: 0.9rem; }
-        .day-btn .day-dish { font-size: 0.75rem; margin-top: 0.25rem; opacity: 0.8; }
-        .status-bar { padding: 1rem; border-radius: 8px; margin: 1rem 0; font-weight: 600; text-align: center; }
-        .status-bar.auto { background: #e8f5e9; color: #2e7d32; }
-        .status-bar.override { background: #fff3e0; color: #e65100; }
-        .admin-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .admin-actions button { flex: 1; padding: 0.75rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        .btn-save { background: var(--color-primary); color: white; }
-        .btn-reset { background: #f5f5f5; color: #333; border: 2px solid #ddd !important; }
-        .preview-card { background: var(--color-bg-alt); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
-        .preview-card h3 { color: var(--color-primary); margin-bottom: 0.5rem; }
+        body { background: var(--color-bg); }
+        .admin-shell { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+        .admin-card { background: #fff; padding: 1.5rem; border-radius: 14px; box-shadow: var(--shadow-md); margin-top: 1rem; }
+        .admin-card input, .admin-card textarea, .admin-card select { width: 100%; padding: .7rem; border: 1px solid #ccc; border-radius: 7px; }
+        .admin-card label { display: block; font-weight: 700; margin-top: .75rem; }
+        .admin-toolbar { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+        .admin-toolbar select { width: auto; min-width: 190px; }
+        .day-editor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem 1rem; }
+        .day-editor .wide { grid-column: 1 / -1; }
+        .admin-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+        .admin-table th, .admin-table td { padding: .65rem; border-bottom: 1px solid #ddd; text-align: left; vertical-align: top; }
+        .admin-table select { min-width: 110px; }
+        .table-wrap { overflow-x: auto; }
+        #adminApp[hidden], #loginCard[hidden] { display: none; }
+        .admin-message { min-height: 1.5rem; margin-top: .75rem; font-weight: 600; }
+        @media (max-width: 650px) { .day-editor { grid-template-columns: 1fr; } .day-editor .wide { grid-column: auto; } }
     </style>
 </head>
-<body style="background: var(--color-bg);">
-    <div class="admin-container">
-        <div class="admin-header">
-            <h1>🔐 Admin Panel</h1>
-            <p>Manage today's displayed menu</p>
-        </div>
+<body>
+    <main class="admin-shell">
+        <h1>Restaurant Admin</h1>
+        <p>Manage the live weekly menu and customer enquiries.</p>
 
-        <!-- Login -->
-        <div class="admin-login" id="login-form">
-            <h3>Enter Admin Password</h3>
-            <input type="password" id="admin-pass" placeholder="Password" onkeypress="if(event.key==='Enter')login()">
-            <button class="btn btn-primary" onclick="login()" style="width:100%;">Login</button>
-            <p id="login-error" style="color:red; margin-top:0.5rem; display:none;">Incorrect password</p>
-        </div>
+        <section class="admin-card" id="loginCard">
+            <form id="loginForm">
+                <label for="adminPassword">Admin password</label>
+                <input type="password" id="adminPassword" autocomplete="current-password" minlength="12" required>
+                <button class="btn btn-primary" type="submit" style="margin-top:1rem">Sign in</button>
+                <p class="admin-message" id="loginMessage" role="status"></p>
+            </form>
+        </section>
 
-        <!-- Panel -->
-        <div class="admin-panel" id="admin-panel">
-            <div id="status-bar" class="status-bar auto">
-                🟢 Auto Mode — Showing menu based on current day
+        <div id="adminApp" hidden>
+            <div class="admin-toolbar">
+                <button class="btn btn-outline" id="logoutButton" type="button">Sign out</button>
+                <span id="globalMessage" class="admin-message" role="status"></span>
             </div>
 
-            <h3>Select Day to Display:</h3>
-            <div class="day-selector" id="day-selector"></div>
+            <section class="admin-card">
+                <h2>Weekly menu</h2>
+                <div class="admin-toolbar">
+                    <label for="daySelect">Edit day</label>
+                    <select id="daySelect"></select>
+                    <label for="overrideSelect">Today's override</label>
+                    <select id="overrideSelect">
+                        <option value="">Automatic (calendar day)</option>
+                    </select>
+                </div>
+                <form id="menuForm" class="day-editor">
+                    <label>Title<input name="title" maxlength="100" required></label>
+                    <label>Price<input name="price" maxlength="50" required></label>
+                    <label class="wide">Madra<textarea name="madra" maxlength="500" required></textarea></label>
+                    <label class="wide">Khatta / secondary<textarea name="khatta" maxlength="500" required></textarea></label>
+                    <label class="wide">Note<textarea name="note" maxlength="300" required></textarea></label>
+                    <label>Emoji<input name="emoji" maxlength="20" required></label>
+                    <label>Image URL<input name="image" type="url" maxlength="1000"></label>
+                    <label><input name="highlight" type="checkbox" style="width:auto"> Highlight this day</label>
+                    <div class="wide"><button class="btn btn-primary" type="submit">Save menu</button></div>
+                </form>
+            </section>
 
-            <div class="admin-actions">
-                <button class="btn-save" onclick="saveOverride()">💾 Save Override</button>
-                <button class="btn-reset" onclick="resetToAuto()">🔄 Reset to Auto</button>
-            </div>
-
-            <div class="preview-card" id="preview-card">
-                <h3>Preview:</h3>
-                <div id="preview-content"></div>
-            </div>
+            <section class="admin-card">
+                <h2>Enquiries</h2>
+                <div class="table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Date</th><th>Customer</th><th>Request</th><th>Message</th><th>Status</th></tr></thead>
+                        <tbody id="enquiryRows"></tbody>
+                    </table>
+                </div>
+            </section>
         </div>
-    </div>
-
-    <script src="js/security.js"></script>
-    <script src="js/menu-data.js"></script>
-    <script>
-        // Password handled by security.js (hashed, rate-limited)
-        let selectedDay = null;
-
-        function initPanel() {
-            const selector = document.getElementById('day-selector');
-            if (!selector) return;
-            selector.innerHTML = '';
-            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            const currentOverride = localStorage.getItem('menuDayOverride');
-
-            if (currentOverride !== null) {
-                selectedDay = parseInt(currentOverride);
-                updateStatus(true);
-            } else {
-                selectedDay = new Date().getDay();
-                updateStatus(false);
-            }
-
-            MENU_DATA.daily.forEach((item, i) => {
-                const btn = document.createElement('div');
-                btn.className = 'day-btn' + (i === selectedDay ? ' active' : '');
-                btn.innerHTML = `<div class="day-name">${item.emoji} ${days[i]}</div><div class="day-dish">${item.madra.split('(')[0].trim()}</div>`;
-                btn.onclick = () => selectDay(i);
-                selector.appendChild(btn);
-            });
-
-            updatePreview();
-        }
-
-        function selectDay(dayIndex) {
-            selectedDay = dayIndex;
-            document.querySelectorAll('.day-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === dayIndex);
-            });
-            updatePreview();
-        }
-
-        function updatePreview() {
-            const item = MENU_DATA.daily[selectedDay];
-            document.getElementById('preview-content').innerHTML = `
-                <p><strong>${item.title || item.day}</strong></p>
-                <p>Madra: ${item.madra}</p>
-                <p>Khatta: ${item.khatta}</p>
-                <p>Price: ${item.price}</p>
-            `;
-        }
-
-        function updateStatus(isOverride) {
-            const bar = document.getElementById('status-bar');
-            if (isOverride) {
-                const item = MENU_DATA.daily[selectedDay];
-                bar.className = 'status-bar override';
-                bar.innerHTML = `⚠️ Override Active — Showing <strong>${item.day}'s</strong> menu`;
-            } else {
-                bar.className = 'status-bar auto';
-                bar.innerHTML = '🟢 Auto Mode — Showing menu based on current day';
-            }
-        }
-
-        function saveOverride() {
-            localStorage.setItem('menuDayOverride', selectedDay);
-            updateStatus(true);
-            alert('✅ Menu override saved! Website will now show ' + MENU_DATA.daily[selectedDay].day + "'s menu.");
-        }
-
-        function resetToAuto() {
-            localStorage.removeItem('menuDayOverride');
-            selectedDay = new Date().getDay();
-            document.querySelectorAll('.day-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === selectedDay);
-            });
-            updateStatus(false);
-            updatePreview();
-            alert('🔄 Reset to auto! Website will show the current day\'s menu.');
-        }
-    </script>
+    </main>
+    <script src="js/admin.js"></script>
 </body>
 </html>

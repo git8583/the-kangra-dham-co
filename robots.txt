@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://thekangradhamco.com/sitemap.xml
+Sitemap: https://201.18.209.226/sitemap.xml
