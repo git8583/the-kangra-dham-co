@@ -43,3 +43,9 @@ test('validates the complete seven-day menu', () => {
 test('rejects incomplete menus', () => {
     assert.throws(() => validateMenu({ daily: [] }), /exactly seven/);
 });
+
+test('rejects unsafe menu image protocols', () => {
+    const unsafe = structuredClone(menu);
+    unsafe.daily[0].image = 'javascript:alert(1)';
+    assert.throws(() => validateMenu(unsafe), /must use HTTPS/);
+});

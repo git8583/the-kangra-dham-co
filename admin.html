@@ -26,7 +26,8 @@
     </style>
 </head>
 <body>
-    <main class="admin-shell">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <main class="admin-shell" id="main-content">
         <h1>Restaurant Admin</h1>
         <p>Manage the live weekly menu and customer enquiries.</p>
 
@@ -35,14 +36,14 @@
                 <label for="adminPassword">Admin password</label>
                 <input type="password" id="adminPassword" autocomplete="current-password" minlength="12" required>
                 <button class="btn btn-primary" type="submit" style="margin-top:1rem">Sign in</button>
-                <p class="admin-message" id="loginMessage" role="status"></p>
+                <p class="admin-message" id="loginMessage" role="status" aria-live="polite"></p>
             </form>
         </section>
 
         <div id="adminApp" hidden>
             <div class="admin-toolbar">
                 <button class="btn btn-outline" id="logoutButton" type="button">Sign out</button>
-                <span id="globalMessage" class="admin-message" role="status"></span>
+                <span id="globalMessage" class="admin-message" role="status" aria-live="polite"></span>
             </div>
 
             <section class="admin-card">
@@ -55,13 +56,13 @@
                         <option value="">Automatic (calendar day)</option>
                     </select>
                 </div>
-                <form id="menuForm" class="day-editor">
-                    <label>Title<input name="title" maxlength="100" required></label>
-                    <label>Price<input name="price" maxlength="50" required></label>
+                <form id="menuForm" class="day-editor" autocomplete="off">
+                    <label>Title<input type="text" name="title" maxlength="100" required></label>
+                    <label>Price<input type="text" name="price" maxlength="50" required></label>
                     <label class="wide">Madra<textarea name="madra" maxlength="500" required></textarea></label>
                     <label class="wide">Khatta / secondary<textarea name="khatta" maxlength="500" required></textarea></label>
                     <label class="wide">Note<textarea name="note" maxlength="300" required></textarea></label>
-                    <label>Emoji<input name="emoji" maxlength="20" required></label>
+                    <label>Emoji<input type="text" name="emoji" maxlength="20" required></label>
                     <label>Image URL<input name="image" type="url" maxlength="1000"></label>
                     <label><input name="highlight" type="checkbox" style="width:auto"> Highlight this day</label>
                     <div class="wide"><button class="btn btn-primary" type="submit">Save menu</button></div>
@@ -69,10 +70,23 @@
             </section>
 
             <section class="admin-card">
+                <h2>Change Admin Password</h2>
+                <form id="passwordForm">
+                    <label for="currentPassword">Current password</label>
+                    <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" minlength="12" maxlength="128" required>
+                    <label for="newPassword">New password</label>
+                    <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+                    <label for="confirmPassword">Confirm new password</label>
+                    <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+                    <button class="btn btn-primary" type="submit" style="margin-top:1rem">Update Password</button>
+                </form>
+            </section>
+
+            <section class="admin-card">
                 <h2>Enquiries</h2>
                 <div class="table-wrap">
                     <table class="admin-table">
-                        <thead><tr><th>Date</th><th>Customer</th><th>Request</th><th>Message</th><th>Status</th></tr></thead>
+                        <thead><tr><th>Date</th><th>Customer</th><th>Request</th><th>Message</th><th>Status</th><th>Action</th></tr></thead>
                         <tbody id="enquiryRows"></tbody>
                     </table>
                 </div>

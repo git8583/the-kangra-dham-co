@@ -8,10 +8,14 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "hash-password": "node scripts/hash-password.js",
+    "lint:html": "html-validate \"*.html\"",
     "test": "node --test"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "html-validate": "^10.0.0"
   },
   "dependencies": {
     "better-sqlite3": "^12.4.1",

@@ -5,6 +5,7 @@
     let menuState = null;
     let overrideState = null;
     let selectedDay = 0;
+    let hasUnsavedChanges = false;
 
     const loginCard = document.getElementById('loginCard');
     const adminApp = document.getElementById('adminApp');
@@ -29,12 +30,13 @@
         adminApp.hidden = false;
     }
 
-    function fillEditor() {
+    function fillEditor(resetDirty = false) {
         const item = menuState.daily[selectedDay];
         ['title', 'price', 'madra', 'khatta', 'note', 'emoji', 'image'].forEach(key => {
             menuForm.elements[key].value = item[key] || '';
         });
         menuForm.elements.highlight.checked = Boolean(item.highlight);
+        if (resetDirty) hasUnsavedChanges = false;
     }
 
     function updateCurrentDay() {
@@ -59,7 +61,7 @@
             overrideSelect.add(new Option(item.day, index));
         });
         overrideSelect.value = override == null ? '' : String(override);
-        fillEditor();
+        fillEditor(true);
         renderEnquiries(enquiries);
     }
 
@@ -69,7 +71,7 @@
         if (!enquiries.length) {
             const row = rows.insertRow();
             const cell = row.insertCell();
-            cell.colSpan = 5;
+            cell.colSpan = 6;
             cell.textContent = 'No enquiries yet.';
             return;
         }
@@ -97,6 +99,22 @@
                 }
             });
             statusCell.appendChild(select);
+            const actionCell = row.insertCell();
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'btn btn-outline';
+            removeButton.textContent = 'Delete';
+            removeButton.addEventListener('click', async () => {
+                if (!confirm(`Delete the enquiry from ${enquiry.name}? This cannot be undone.`)) return;
+                try {
+                    await api(`api/admin/enquiries/${enquiry.id}`, { method: 'DELETE' });
+                    row.remove();
+                    globalMessage.textContent = 'Enquiry deleted.';
+                } catch (error) {
+                    globalMessage.textContent = error.message;
+                }
+            });
+            actionCell.appendChild(removeButton);
         });
     }
 
@@ -135,9 +153,47 @@
             });
             overrideState = overrideSelect.value === '' ? null : Number(overrideSelect.value);
             globalMessage.textContent = 'Menu saved.';
+            hasUnsavedChanges = false;
         } catch (error) {
             globalMessage.textContent = error.message;
         }
+    });
+
+    menuForm.addEventListener('input', () => {
+        hasUnsavedChanges = true;
+    });
+    overrideSelect.addEventListener('change', () => {
+        hasUnsavedChanges = true;
+    });
+
+    document.getElementById('passwordForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const currentPassword = form.elements.currentPassword.value;
+        const newPassword = form.elements.newPassword.value;
+        if (newPassword !== form.elements.confirmPassword.value) {
+            globalMessage.textContent = 'New password confirmation does not match.';
+            form.elements.confirmPassword.focus();
+            return;
+        }
+        globalMessage.textContent = 'Updating password…';
+        try {
+            await api('api/admin/password', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+            form.reset();
+            globalMessage.textContent = 'Admin password updated.';
+        } catch (error) {
+            globalMessage.textContent = error.message;
+        }
+    });
+
+    window.addEventListener('beforeunload', event => {
+        if (!hasUnsavedChanges) return;
+        event.preventDefault();
+        event.returnValue = '';
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {

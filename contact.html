@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contact The Kangra Dham Co. - Phone, WhatsApp, email, and contact form. We'd love to hear from you.">
     <title>Contact Us | The Kangra Dham Co.</title>
+    <link rel="canonical" href="https://201.18.209.226/contact.html">
+        <script defer src="js/analytics.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,21 +18,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Kangra Dham">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M812X04ENX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-M812X04ENX');
-    </script>
-</head>
+    <link rel="apple-touch-icon" href="icons/icon-192.png"></head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/917011376087?text=Hi!%20I'd%20like%20to%20contact%20Kangra%20Dham%20Express" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
         <span class="whatsapp-tooltip">Chat with Us</span>
     </a>
 
@@ -43,7 +36,7 @@
                     <span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span>
                 </div>
             </a>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-menu" id="navMenu">
@@ -61,6 +54,8 @@
         </div>
     </nav>
 
+    <main id="main-content">
+
     <!-- Page Header -->
     <section class="page-header">
         <h1>Contact Us</h1>
@@ -74,17 +69,17 @@
                 <!-- Contact Info -->
                 <div class="contact-info-card" data-animate>
                     <h3>Get in Touch</h3>
-                    
+
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-phone" aria-hidden="true"></i>
                         <div class="contact-item-text">
                             <strong>Phone</strong>
-                            <a href="tel:+917011376087">+91 7011376087</a>
+                            <a href="tel:+917011376087">+91&nbsp;7011376087</a>
                         </div>
                     </div>
 
                     <div class="contact-item">
-                        <i class="fab fa-whatsapp"></i>
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
                         <div class="contact-item-text">
                             <strong>WhatsApp</strong>
                             <a href="https://wa.me/917011376087" target="_blank">+91 7011376087 (Click to Chat)</a>
@@ -92,7 +87,7 @@
                     </div>
 
                     <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
                         <div class="contact-item-text">
                             <strong>Email</strong>
                             <a href="mailto:kapil8583@gmail.com">kapil8583@gmail.com</a>
@@ -100,7 +95,7 @@
                     </div>
 
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                         <div class="contact-item-text">
                             <strong>Address</strong>
                             <span>Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway</span>
@@ -108,10 +103,10 @@
                     </div>
 
                     <div class="contact-item">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-clock" aria-hidden="true"></i>
                         <div class="contact-item-text">
                             <strong>Opening Hours</strong>
-                            <span>Lunch: 12:00 PM – 3:30 PM<br>Snacks & Chai: 4:30 PM – 6:30 PM<br>Dinner: 7:30 PM – 10:00 PM</span>
+                            <span>Lunch: 12:00 PM – 3:30 PM<br>Snacks &amp; Chai: 4:30 PM – 6:30 PM<br>Dinner: 7:30 PM – 10:00 PM</span>
                         </div>
                     </div>
 
@@ -119,10 +114,6 @@
                     <div style="margin-top: 2rem;">
                         <strong style="display: block; margin-bottom: 0.8rem;">Follow Us</strong>
                         <div class="social-links" style="margin-top: 0;">
-                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
@@ -133,15 +124,15 @@
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required placeholder="Your name">
+                            <input type="text" id="name" name="name" autocomplete="name" required placeholder="Your name…">
                         </div>
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                            <input type="email" id="email" name="email" autocomplete="email" spellcheck="false" required placeholder="you@example.com…">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+91 7011376087">
+                            <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210…">
                         </div>
                         <div class="form-group">
                             <label for="subject">Subject *</label>
@@ -158,7 +149,7 @@
                         </div>
                         <div class="form-group">
                             <label for="message">Message *</label>
-                            <textarea id="message" name="message" required placeholder="How can we help you?"></textarea>
+                            <textarea id="message" name="message" autocomplete="off" required placeholder="How can we help you?…"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
                     </form>
@@ -173,8 +164,9 @@
             <h2 class="section-title">Find Us</h2>
             <div class="location-card" style="max-width: 800px; margin: 0 auto;">
                 <iframe 
+                    title="Map showing The Kangra Dham Co. near Sector 137, Noida"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d56040.72517365148!2d77.29908!3d28.5355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5a43173357b%3A0x37ffce30c87cc03f!2sNoida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1690000000000!5m2!1sen!2sin" 
-                    width="100%" 
+                    width="800"
                     height="350" 
                     style="border:0; border-radius: var(--radius-lg);" 
                     allowfullscreen="" 
@@ -184,6 +176,8 @@
             </div>
         </div>
     </section>
+
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -198,10 +192,6 @@
                     </a>
                     <p>Authentic Kangra Dham. Fast. Affordable. Everyday.</p>
                     <div class="social-links">
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
                 <div class="footer-links">
@@ -225,39 +215,19 @@
                 </div>
                 <div class="footer-contact">
                     <h4>Contact Us</h4>
-                    <p><i class="fas fa-phone"></i> +91 7011376087</p>
-                    <p><i class="fab fa-whatsapp"></i> +91 7011376087</p>
-                    <p><i class="fas fa-envelope"></i> kapil8583@gmail.com</p>
-                    <p><i class="fas fa-clock"></i> Lunch: 12–3:30 PM | Snacks: 4:30–6:30 PM | Dinner: 7:30–10 PM</p>
+                    <p><i class="fas fa-phone" aria-hidden="true"></i> +91 7011376087</p>
+                    <p><i class="fab fa-whatsapp" aria-hidden="true"></i> +91 7011376087</p>
+                    <p><i class="fas fa-envelope" aria-hidden="true"></i> kapil8583@gmail.com</p>
+                    <p><i class="fas fa-clock" aria-hidden="true"></i> Lunch: 12–3:30 PM | Snacks: 4:30–6:30 PM | Dinner: 7:30–10 PM</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 The Kangra Dham Co.. All rights reserved.</p>
+                <p>&copy; 2026 The Kangra Dham Co. All rights reserved. &middot; <a href="privacy.html">Privacy</a></p>
             </div>
         </div>
     </footer>
     <script src="js/security.js"></script>
 <script src="js/main.js"></script>
 
-    <!-- Service Worker & Analytics Tracking -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('SW registered:', reg.scope))
-                    .catch(err => console.log('SW failed:', err));
-            });
-        }
-        document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
-            link.addEventListener('click', () => {
-                if (typeof gtag === 'function') {
-                    gtag('event', 'whatsapp_click', {
-                        event_category: 'engagement',
-                        event_label: link.closest('section')?.id || 'floating'
-                    });
-                }
-            });
-        });
-    </script>
-</body>
+    <!-- Service Worker & Analytics Tracking --></body>
 </html>

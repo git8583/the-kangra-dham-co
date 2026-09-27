@@ -14,12 +14,26 @@ const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '127.0.0.1';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+if (IS_PRODUCTION) {
+    if (!process.env.COOKIE_SECRET || process.env.COOKIE_SECRET.length < 32) {
+        throw new Error('COOKIE_SECRET must contain at least 32 characters in production.');
+    }
+    if (!/^scrypt:[a-f0-9]{32}:[a-f0-9]{128}$/.test(process.env.ADMIN_PASSWORD_HASH || '')) {
+        throw new Error('ADMIN_PASSWORD_HASH is missing or invalid in production.');
+    }
+}
+
 const databasePath = path.resolve(ROOT, process.env.DATABASE_PATH || 'data/kangra-dham.sqlite');
 const db = createDatabase(databasePath, path.join(ROOT, 'data', 'menu.json'));
 const app = express();
 
 if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY));
 app.disable('x-powered-by');
+app.use((req, res, next) => {
+    res.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+    next();
+});
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -46,6 +60,10 @@ const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 150, standardHea
 const formLimiter = rateLimit({ windowMs: 10 * 60 * 1000, limit: 5, standardHeaders: 'draft-8', legacyHeaders: false });
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: 'draft-8', legacyHeaders: false });
 app.use('/api', apiLimiter);
+app.use('/api/admin', (req, res, next) => {
+    res.set('Cache-Control', 'no-store');
+    next();
+});
 
 function randomToken(bytes = 32) {
     return crypto.randomBytes(bytes).toString('base64url');
@@ -62,11 +80,17 @@ function safeEqual(left, right) {
 }
 
 function verifyPassword(password) {
-    const encoded = process.env.ADMIN_PASSWORD_HASH || '';
+    const saved = db.prepare("SELECT value FROM settings WHERE key = 'admin_password_hash'").get();
+    const encoded = saved?.value || process.env.ADMIN_PASSWORD_HASH || '';
     const [algorithm, salt, expected] = encoded.split(':');
     if (algorithm !== 'scrypt' || !salt || !expected) return false;
     const actual = crypto.scryptSync(password, salt, 64).toString('hex');
     return safeEqual(actual, expected);
+}
+
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    return `scrypt:${salt}:${crypto.scryptSync(password, salt, 64).toString('hex')}`;
 }
 
 function requireAdmin(req, res, next) {
@@ -89,7 +113,10 @@ function requireCsrf(req, res, next) {
     next();
 }
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/api/health', (req, res) => {
+    db.prepare('SELECT 1').get();
+    res.json({ status: 'ok', database: 'ok' });
+});
 
 app.get('/api/menu', (req, res) => {
     const menu = JSON.parse(db.prepare("SELECT value FROM settings WHERE key = 'menu'").get().value);
@@ -142,6 +169,23 @@ app.post('/api/admin/logout', requireAdmin, requireCsrf, (req, res) => {
     res.status(204).end();
 });
 
+app.put('/api/admin/password', requireAdmin, requireCsrf, (req, res) => {
+    const currentPassword = typeof req.body.currentPassword === 'string' ? req.body.currentPassword : '';
+    const newPassword = typeof req.body.newPassword === 'string' ? req.body.newPassword : '';
+    if (!verifyPassword(currentPassword)) return res.status(401).json({ error: 'Current password is incorrect.' });
+    if (newPassword.length < 12 || newPassword.length > 128) {
+        return res.status(400).json({ error: 'New password must contain 12–128 characters.' });
+    }
+    if (currentPassword === newPassword) {
+        return res.status(400).json({ error: 'Choose a new password that differs from the current password.' });
+    }
+    db.prepare(`
+        INSERT INTO settings (key, value, updated_at) VALUES ('admin_password_hash', ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP
+    `).run(hashPassword(newPassword));
+    res.json({ updated: true });
+});
+
 app.get('/api/admin/enquiries', requireAdmin, (req, res) => {
     const rows = db.prepare('SELECT * FROM enquiries ORDER BY created_at DESC LIMIT 500').all();
     res.json(rows);
@@ -155,6 +199,12 @@ app.patch('/api/admin/enquiries/:id', requireAdmin, requireCsrf, (req, res) => {
         .run(req.body.status, Number(req.params.id));
     if (!result.changes) return res.status(404).json({ error: 'Enquiry not found.' });
     res.json({ updated: true });
+});
+
+app.delete('/api/admin/enquiries/:id', requireAdmin, requireCsrf, (req, res) => {
+    const result = db.prepare('DELETE FROM enquiries WHERE id = ?').run(Number(req.params.id));
+    if (!result.changes) return res.status(404).json({ error: 'Enquiry not found.' });
+    res.status(204).end();
 });
 
 app.put('/api/admin/menu', requireAdmin, requireCsrf, (req, res) => {
@@ -178,14 +228,15 @@ app.put('/api/admin/menu', requireAdmin, requireCsrf, (req, res) => {
 const allowedRootFiles = new Set([
     'index.html', 'about.html', 'admin.html', 'catering.html', 'contact.html', 'corporate.html',
     'gallery.html', 'locations.html', 'menu.html', 'offline.html', 'order.html', 'stories.html',
-    'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js'
+    'privacy.html', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js'
 ]);
-app.use('/css', express.static(path.join(ROOT, 'css'), { maxAge: IS_PRODUCTION ? '7d' : 0, immutable: IS_PRODUCTION }));
+app.use('/css', express.static(path.join(ROOT, 'css'), { maxAge: IS_PRODUCTION ? '1h' : 0 }));
 app.use('/js', express.static(path.join(ROOT, 'js'), { maxAge: IS_PRODUCTION ? '1h' : 0 }));
 app.use('/icons', express.static(path.join(ROOT, 'icons'), { maxAge: IS_PRODUCTION ? '30d' : 0, immutable: IS_PRODUCTION }));
 app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'index.html')));
 app.get('/:file', (req, res, next) => {
     if (!allowedRootFiles.has(req.params.file)) return next();
+    if (req.params.file === 'admin.html') res.set('Cache-Control', 'no-store');
     res.sendFile(path.join(ROOT, req.params.file));
 });
 app.use((req, res) => {

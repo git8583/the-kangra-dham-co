@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /api/
 
 Sitemap: https://201.18.209.226/sitemap.xml

@@ -103,7 +103,7 @@ const TRANSLATIONS = {
                 font-weight: 600;
                 cursor: pointer;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                transition: all 0.3s ease;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
             .lang-toggle-btn:hover {
                 transform: scale(1.05);
