@@ -22,10 +22,10 @@ Upload the repository to `/opt/kangra-dham/current`, then run:
 
 ```bash
 chmod +x deploy/install.sh deploy/backup.sh
-./deploy/install.sh kangra.kran-apps.cloud
+./deploy/install.sh kangradham.kran-apps.cloud
 ```
 
-The production URL is `https://kangra.kran-apps.cloud`. Current Certbot releases can issue short-lived,
+The production URL is `https://kangradham.kran-apps.cloud`. Current Certbot releases can issue short-lived,
 publicly trusted certificates for IP addresses. After issuance, install `deploy/nginx-tls.conf`
 with the matching `__SERVER_NAME__` and `__CERT_NAME__`, and configure renewal with the
 `/var/www/certbot` webroot. A domain can use the same TLS template with its certificate name.

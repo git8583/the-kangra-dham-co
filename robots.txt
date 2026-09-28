@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /api/
 
-Sitemap: https://kangra.kran-apps.cloud/sitemap.xml
+Sitemap: https://kangradham.kran-apps.cloud/sitemap.xml
