@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">The Kangra Dham Co.</title>
+  <rect width="64" height="64" rx="14" fill="#8e4528"/>
+  <path d="M7 30 19 17l8 8L36 12l21 18H7Z" fill="#faf8f5"/>
+  <path d="m20 25 7-7 5 5 4-5 12 12H15l5-5Z" fill="#daa520"/>
+  <path d="M13 37h38c-1 11-8 18-19 18S14 48 13 37Z" fill="#faf8f5"/>
+  <path d="M17 41h30" stroke="#daa520" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 35c-4-5 4-6 0-11M32 35c-4-5 4-6 0-11M40 35c-4-5 4-6 0-11" fill="none" stroke="#faf8f5" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
