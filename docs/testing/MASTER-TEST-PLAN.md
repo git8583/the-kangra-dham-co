@@ -276,36 +276,50 @@ Overall recommendation:  Ready for use  /  Fix S1-S2 first  /  Not ready
 
 ---
 
-## 10. Issues already identified while writing these guides
+## 10. Issues identified while writing these guides
 
-These were found by **reading the source code**, before any testing began. They are not yet confirmed against the live apps — the tester should verify each one first, as a quick high-value pass. Test IDs are given where the guide covers them.
+These were found by **reading the source code**, before any testing began.
 
-### Security & data-safety (verify first)
+> **Status note (19 Oct 2026):** the issues marked ✅ below have been **fixed and pushed to the repositories**, but at the time of writing they had **not been redeployed**, so the **live apps may still show the old behaviour**. Confirm the deployed version before raising — or closing — any of these. Everything marked ⬜ is still outstanding.
+
+### ✅ Fixed in code (redeploy required to reach users)
+
+| App | Issue | Fix | Commit |
+|---|---|---|---|
+| **Job Agent** | `POST /api/cv/check` took a caller-supplied `path` and passed it unvalidated to the file reader, returning extracted emails/URLs **and an AI summary of the file contents**. A logged-in user could read arbitrary server files such as `.env`. | Path is now resolved against the caller's own CV folder and must resolve inside it; `..`, absolute paths and symlinks are rejected (403), missing file 404. | `5d23eae` |
+| **MoneyPortfolio** | No attempt limit on the 4-digit vault PIN. | Escalating persisted lockout (1 min → 4 h), PBKDF2 raised 100k → 600k with safe migration of the existing vault, minimum PIN for new/changed PINs raised to 6 digits. | `ca5c1b4` |
+| **Junior Playhouse** | **"Choose this plan" granted premium with no payment step.** | No payment integration exists at all, so the feature was kept but gated: plan buttons require the existing owner unlock (Parent Zone → ⚙️ App). | `5e728b1` |
+| **Junior Playhouse** | Paint **Clear** and Parent Zone **Remove {name}** destroyed data with no confirmation. | New `ConfirmDialog` on both, child-friendly wording, safe option first, Android back = cancel. | `5e728b1` |
+| **Junior Playhouse** | Parental-gate lockout reset by leaving the screen. | Lockout persisted to AsyncStorage with corrupt-value, expiry and backwards-clock handling, plus a live countdown. | `5e728b1` |
+| **Voyagr** | AI-extracted **interests, pace and budget** were parsed, shown as "understood", then silently discarded — the itinerary ignored them. | `TripForm` now seeds these three from `prefill` like the other fields; unrecognised values fall back safely. 2 regression tests added. | `65543ce` |
+| **SmashPoint** | `EXPO_PUBLIC_APP_URL` fell back to the dead `smashpoint-badminton.surge.sh`, so share/invite links and QR codes pointed at a stale host when the env var was unset. | Fallback now `https://smashpoint.kran-apps.cloud`; 7 occurrences replaced across app, Supabase functions and docs. | `3d09d01` |
+
+**Verification note:** test SP-352 and VY-C-29 should now **pass**. If they fail on the live site, the cause is almost certainly that the app has not been redeployed, not a code defect.
+
+### ⬜ Still outstanding — security & data safety
 
 | App | Issue | Why it matters |
 |---|---|---|
-| **Job Agent** | `POST /api/cv/check` takes a caller-supplied `path` and passes it straight to the file reader. The response returns `word_count`, `emails`, `urls` and an **AI summary of the file's contents**. | A logged-in user can read arbitrary server files, e.g. `.env`. Mitigated by: login required, invite-only, no self-signup — so realistically owner-only exposure. |
-| **MoneyPortfolio** | No attempt limit or lockout on the 4–6 digit vault PIN. | A 4-digit PIN is brute-forceable with unlimited attempts. |
-| **MoneyPortfolio** | Temporary passwords rendered via `alert()` / in the DOM. | Credentials exposed in screenshots and browser history. |
-| **MoneyPortfolio** | Self-registration may be open on a system intended to be private. | Strangers could create accounts. Confirm intended behaviour. |
+| **MoneyPortfolio** | Offline brute force of a **copied vault blob** is still possible. 600k PBKDF2 iterations raise the cost only ~6×; the 6-digit minimum PIN is the real improvement, and **existing shorter PINs still work**. | Change your PIN to 6+ digits to actually benefit. |
+| **MoneyPortfolio** | Temporary passwords rendered via `alert()` / in the DOM. | Credentials land in screenshots and browser history. |
+| **MoneyPortfolio** | Self-registration may be open on a system intended to be private. | Strangers could create accounts. **Confirm intended behaviour.** |
 | **MoneyPortfolio** | Auto-export writes **unencrypted** `.xlsx` financial data to Downloads. | Plaintext financial data at rest. |
-| **Junior Playhouse** | **"Choose this plan" grants premium with no payment step.** | Paid features are free to anyone. |
+| **MoneyPortfolio** | On-device DevTools tampering can clear the local PIN guard (the server copy restores it on reload). | Accepted residual risk. |
 
-### Likely functional bugs
+### ⬜ Still outstanding — functional & content
 
-| App | Issue | Test ID |
-|---|---|---|
-| **Voyagr** | AI-detected interests / pace / budget are **never applied** to the planner form — the AI "understands" them, then discards them. | VY-C-29 |
-| **SmashPoint** | `EXPO_PUBLIC_APP_URL` falls back to a stale `smashpoint-badminton.surge.sh` host, so **share and invite links may point at the wrong domain**. | SP-352 |
-| **Junior Playhouse** | Paint **Clear** and Parent Zone **Remove {name}** destroy data with **no confirmation dialog**. | — |
-| **Junior Playhouse** | Parental-gate lockout (3 tries / 60 s) **resets simply by leaving the screen**. | — |
-| **Junior Playhouse** | **No audio at all** — ABC Phonics has no letter sounds, Melody Match no instrument sounds. | — |
-| **Junior Playhouse** | Coach-card instructions **contradict actual game rules** in Little Chef, Story Steps and Basket Catch. | — |
-| **Kangra Dham** | Canonical URLs use the **raw IP address** on 9 pages. | KD content |
-| **Kangra Dham** | **₹200 vs ₹299** hero price conflict; catering vs corporate price conflict. | KD-content |
-| **Kangra Dham** | Stale **"Kangra Dham Express"** branding in WhatsApp message text; empty social links; `offline.html` served as the 404 page. | KD content |
-| **Chessary** | Lenient FEN parser accepts **kingless / malformed positions**. | CH-IO |
-| **Chessary** | No URL router — the browser **Back button does not change tabs** and exits the app. | CH-XC |
+| App | Issue |
+|---|---|
+| **Junior Playhouse** | **No audio anywhere** — ABC Phonics has no letter sounds, Melody Match no instrument sounds. Significant for a children's app. |
+| **Junior Playhouse** | Coach-card instructions **contradict actual game rules** in Little Chef, Story Steps and Basket Catch. |
+| **Chessary** | Lenient FEN parser accepts **kingless / malformed positions**. |
+| **Chessary** | No URL router — browser **Back does not change tabs** and exits the app. |
+| **Voyagr** | Prefill callout still says "cities, dates and travellers" although it now also applies interests, pace and budget. |
+| **Voyagr** | No password reset exists. |
+| **Kangra Dham** | Canonical URLs use the **raw IP address** on 9 pages. |
+| **Kangra Dham** | **₹200 vs ₹299** hero price conflict; catering vs corporate price conflict. |
+| **Kangra Dham** | Stale **"Kangra Dham Express"** branding in WhatsApp text; empty social links; `offline.html` served as the 404 page; Sector 62 footer on `menu.html`; partial Hindi; gallery placeholders; personal Gmail address. |
+| **SmashPoint** | `surge` devDependency still present in `package.json`/lockfile; `.github/copilot-instructions.md` still describes a Surge deployment policy. |
 
 ### Configuration to confirm before testing
 
