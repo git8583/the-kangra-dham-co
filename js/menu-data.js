@@ -34,7 +34,7 @@ const MENU_DATA = {
             madra: 'Chana Madra (Chickpeas slow-cooked in rich curd, ghee, raisins & whole cardamom)',
             khatta: 'Khatta Kale Chane (Tangy black chickpeas with dry mango & jaggery)',
             note: 'The classic, comforting start to the week',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '🫘',
             image: null
         },
@@ -45,7 +45,7 @@ const MENU_DATA = {
             madra: 'Rajma Madra (Red kidney beans simmered in spiced yogurt)',
             khatta: 'Teliyan Maash (Whole black lentils slow-cooked overnight with mustard oil)',
             note: 'High-protein, wholesome homestyle meal',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '💪',
             image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Rajma_Chawal.JPG'
         },
@@ -56,7 +56,7 @@ const MENU_DATA = {
             madra: 'Sepu Badi Madra (King of Dham — spinach & fried lentil dumplings in yogurt gravy)',
             khatta: 'Ambal / Gur Imli Khatta (Sweet & sour pumpkin/tamarind gravy)',
             note: 'The most sought-after Dham day',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '👑',
             image: null
         },
@@ -67,7 +67,7 @@ const MENU_DATA = {
             madra: 'Paneer / Phool Gobi Madra (Cottage cheese or cauliflower in rich spiced curd)',
             khatta: 'Hing Chana Dal (Yellow lentils tempered with asafoetida & cumin)',
             note: 'Light, fragrant digestives for mid-week',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '🧀',
             image: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Paneer_Makhani_-_Mohali_2016-08-07_9114.JPG'
         },
@@ -78,7 +78,7 @@ const MENU_DATA = {
             madra: 'Kaale Chane ka Madra (Brown chickpea Madra cooked with dry fruits)',
             khatta: 'Dham Khatta (Tangy boondi & mustard seed gravy)',
             note: 'Rich and festive finish to the work week',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '🎉',
             image: 'https://upload.wikimedia.org/wikipedia/commons/c/ce/Black_Chick_peas_soup_%28Kala_Chana_curry%29.jpg'
         },
@@ -89,7 +89,7 @@ const MENU_DATA = {
             madra: 'Guchhi (Wild Himalayan Mushroom) / Paneer Special Madra',
             khatta: 'Teliyan Maash (Rich black lentils)',
             note: 'Premium weekend flavor profile',
-            price: '₹200–₹250',
+            price: '₹299',
             emoji: '🍄',
             image: null
         }

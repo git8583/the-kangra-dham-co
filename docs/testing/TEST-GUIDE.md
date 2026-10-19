@@ -87,9 +87,9 @@ Test ID prefix: **KD** · Live URL: <https://kangradham.kran-apps.cloud> · Lega
 
 ### Public pages (all must return HTTP 200)
 
-`/` (or `/index.html`) · `/about.html` · `/menu.html` · `/locations.html` · `/catering.html` · `/gallery.html` · `/corporate.html` · `/stories.html` · `/contact.html` · `/order.html` · `/privacy.html` · `/admin.html` · `/offline.html`
+`/` (or `/index.html`) · `/about.html` · `/menu.html` · `/locations.html` · `/catering.html` · `/gallery.html` · `/corporate.html` · `/stories.html` · `/contact.html` · `/order.html` · `/privacy.html` · `/admin.html` · `/offline.html` · `/404.html`
 
-> The server serves only an allow-list of root files. **Any unknown path returns HTTP 404 but renders the body of `offline.html`** ("You're offline right now…"). There is **no dedicated 404 page** — see KD-801.
+> The server serves only an allow-list of root files. **Any unknown path returns HTTP 404 and renders `404.html`** ("We couldn't find that page", with links back into the site). `offline.html` is now used only as the service-worker offline fallback.
 
 ### Browsers / devices to cover
 
@@ -171,7 +171,7 @@ Breakpoints to check: **360 px**, **390 px**, **768 px**, **1024 px**, **1280 px
 | F-02 | Global | "Order Now" nav button (`.btn-nav`) → `/order.html` | All pages | No |
 | F-03 | Global | Mobile hamburger menu / collapsed nav | All pages ≤768 px | No |
 | F-04 | Global | Site logo / brand wordmark → Home | All pages | No |
-| F-05 | Global | Footer — brand blurb, quick links, contact block, "Follow Us" social area | All pages | No |
+| F-05 | Global | Footer — brand blurb, quick links, contact block | All pages | No |
 | F-06 | Global | Footer click-to-call `tel:+917011376087` | All pages | ⚠️ Yes |
 | F-07 | Global | Footer email link `kapil8583@gmail.com` | All pages | ⚠️ Yes |
 | F-08 | Global | Footer address block | All pages | No |
@@ -182,7 +182,7 @@ Breakpoints to check: **360 px**, **390 px**, **768 px**, **1024 px**, **1280 px
 | F-13 | PWA | Service worker `kangra-dham-v5` (network-first HTML, never caches `/api/`) | All pages | No |
 | F-14 | PWA | Web app manifest / installability | `/manifest.json` | No |
 | F-15 | PWA | Offline fallback page | `/offline.html` | No |
-| F-16 | Home | Hero section with headline, sub-copy, CTA buttons and stat strip (incl. "₹200 Unlimited Thali") | `/` | No |
+| F-16 | Home | Hero section with headline, sub-copy, CTA buttons and stat strip (incl. "₹299 Unlimited Thali") | `/` | No |
 | F-17 | Home | **Today's Dham** card — day name, thali title, price, dish list, image (from `/api/menu`, falls back to bundled `js/menu-data.js`) | `/` | No |
 | F-18 | Home | Heritage / story teaser section | `/` | No |
 | F-19 | Home | Dish showcase section | `/` | No |
@@ -198,11 +198,11 @@ Breakpoints to check: **360 px**, **390 px**, **768 px**, **1024 px**, **1280 px
 | F-29 | Menu | Menu page order CTA (WhatsApp) | `/menu.html` | ⚠️ Yes |
 | F-30 | About | Heritage narrative, imagery, section headings | `/about.html` | No |
 | F-31 | Locations | Address, opening hours (Lunch 12:00–15:30, Snacks 16:30–18:30, Dinner 19:30–22:00), map embed, call & WhatsApp CTAs | `/locations.html` | ⚠️ Yes (call/WA) |
-| F-32 | Gallery | Photo grid — currently 4 `gallery-placeholder` tiles ("coming soon") | `/gallery.html` | No |
+| F-32 | Gallery | Photo grid — licensed stock/Creative Commons imagery only, plus a "more original photography coming soon" note. No placeholder tiles. | `/gallery.html` | No |
 | F-33 | Catering | Package/subscription pricing cards (₹179 / ₹169 / ₹159 per thali) | `/catering.html` | No |
 | F-34 | Catering | **Catering enquiry form** `#cateringForm` — Name, Email, Phone, Company, Service type, Number of people, Message | `/catering.html` | ⚠️ Yes (stored lead) |
 | F-35 | Catering | Catering WhatsApp CTA | `/catering.html` | ⚠️ Yes |
-| F-36 | Corporate | Corporate pricing (₹200–₹250 / meal, ₹1,099 / week for 6 days, ₹3,999 / month for 26 days) | `/corporate.html` | No |
+| F-36 | Corporate | Corporate pricing (₹200–₹250 / meal, ₹1,099 / week for 6 days, ₹3,999 / month for 26 days) — labelled on the page as an office-delivery rate, distinct from the ₹299 walk-in thali and the catering tiers | `/corporate.html` | No |
 | F-37 | Corporate | Corporate CTA → catering form / WhatsApp | `/corporate.html` | ⚠️ Yes |
 | F-38 | Stories | Customer stories / testimonial articles | `/stories.html` | No |
 | F-39 | Contact | **Contact form** `#contactForm` — Name, Email, Phone, Subject (select), Message | `/contact.html` | ⚠️ Yes (stored lead) |
@@ -250,7 +250,7 @@ On the Home, Our Heritage, The Menu, Corporate and Stories pages there is a **la
 
 ### 6.2 Home page (`/`)
 
-1. **Hero** — the big headline, a short description of Kangra Dham, call-to-action buttons, and a strip of statistics (including "₹200 Unlimited Thali").
+1. **Hero** — the big headline, a short description of Kangra Dham, call-to-action buttons, and a strip of statistics (including "₹299 Unlimited Thali").
 2. **Today's Dham** — the main feature. The site works out today's day of the week and shows that day's thali: the day name, the thali title (e.g. *The Grand Shadi Wali Dham*), the price, the hero dishes (Madra and Khatta of the day), a note, an emoji and a photo. The data comes live from `/api/menu`; if the API is unreachable the page silently falls back to a copy bundled in the browser, so the card is never empty. The owner can force a particular day using the admin "override".
 3. **Heritage teaser** — a short story about the Kangra Dham tradition with a link to *Our Heritage*.
 4. **Dish showcase** — the signature dishes with pictures.
@@ -274,7 +274,7 @@ Below the thali are two grids:
 ### 6.4 Our Heritage (`/about.html`), Gallery, Stories, Privacy
 
 - **Our Heritage** — long-form story of the Dham tradition and the family behind the business.
-- **Gallery** — currently shows **four placeholder tiles** with a camera icon and "coming soon" copy; real photographs have not been added yet.
+- **Gallery** — shows licensed stock / Creative Commons imagery that illustrates the tradition, with an explicit note that the business's own photography is still to come. The old placeholder tiles have been removed.
 - **Stories** — customer stories / testimonials in article form.
 - **Privacy** — the privacy policy text.
 
@@ -335,9 +335,9 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 | KD-006 | Active page is highlighted in nav | P3 | UI | — | 1. Open `/menu.html`. 2. Look at the nav. | `The Menu` is visually marked as the current page. **[CONFIRM WITH OWNER]** if no active state exists by design. |
 | KD-007 | Logo returns to Home | P2 | Functional | Any inner page open | 1. Open `/contact.html`. 2. Click the brand name/logo top-left. | Navigates to `/` (Home). |
 | KD-008 | Footer contact details | P1 | Content | — | 1. Scroll to the footer on Home. 2. Read address, phone, email. | Phone `+91 7011376087`; email `kapil8583@gmail.com`; address "Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway", PIN **201305**. Must match the owner's sheet (§10). |
-| KD-009 | **Footer address wrong on Menu page** | P1 | Content | — | 1. Open `/menu.html`. 2. Scroll to the footer. 3. Read the address. | **Known defect:** the Menu page footer shows **"Sector 62, Noida, UP 201301"**, which contradicts Sector 137 / 201305 on every other page. Raise as S2. |
+| KD-009 | Footer address on Menu page | P1 | Content | — | 1. Open `/menu.html`. 2. Scroll to the footer. 3. Read the address. | **Fixed:** the Menu footer now reads "Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway", matching every other page. Any reappearance of "Sector 62" is a regression (S2). |
 | KD-010 | Footer quick links work | P2 | Functional | — | 1. Click every link in the footer quick-links column. | Each opens the correct page with HTTP 200; none 404. |
-| KD-011 | "Follow Us" social links | P2 | UI | — | 1. Scroll to the footer on any page. 2. Look under "Follow Us". | **Known defect:** the `.social-links` container is **empty on every page** — a heading with no icons/links. Raise as S3; **[CONFIRM WITH OWNER]** which social profiles should be linked. |
+| KD-011 | No dead social links | P2 | UI | — | 1. Scroll to the footer on any page. 2. Open `/contact.html`. | **Fixed:** the empty `.social-links` containers and the orphaned "Follow Us" heading have been removed site-wide, so no empty social area is presented. **[CONFIRM WITH OWNER]** — once real profile URLs exist they can be added back. |
 | KD-012 | External links are safe | P3 | Functional | DevTools open | 1. Inspect any link with `target="_blank"` (map, WhatsApp). | Each carries `rel="noopener noreferrer"` (added by `js/security.js`). |
 | KD-013 | Footer copyright year | P3 | Content | — | 1. Read the footer copyright. | Shows the current year and "The Kangra Dham Co." **[CONFIRM WITH OWNER]** |
 | KD-014 | Analytics consent banner appears | P2 | Functional | Fresh incognito window | 1. Open the site in incognito. | A consent banner appears with exactly two buttons: **Decline** and **Allow Analytics**. |
@@ -355,7 +355,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 |---|---|---|---|---|---|---|
 | KD-030 | Hero renders | P1 | UI | — | 1. Open `/`. | Headline, sub-copy, CTA buttons and the stat strip all render; no overlapping text; hero image loads. |
 | KD-031 | Hero CTA buttons work | P1 | Functional | — | 1. Click each hero CTA in turn. | Each goes to its stated destination (menu / order / WhatsApp). WhatsApp buttons ⚠️ — see KD-060. |
-| KD-032 | **Hero price claim vs menu** | P2 | Content | — | 1. Read the hero stat "₹200 Unlimited Thali". 2. Open `/menu.html` and check Sunday's price. | **Known inconsistency:** Sunday "The Grand Shadi Wali Dham" is **₹299**, so "₹200" is only the *starting* price. Expected: the claim should read "from ₹200". Raise as S3. **[CONFIRM WITH OWNER]** |
+| KD-032 | Hero price claim vs menu | P2 | Content | — | 1. Read the hero stat "₹299 Unlimited Thali". 2. Open `/menu.html` and check every day's price. | **Fixed:** the unlimited thali is **₹299 on all seven days**, matching the hero stat, the Open Graph/Twitter descriptions and the ₹299 customer testimonial on Home. |
 | KD-033 | Today's Dham matches the real day | P1 | Functional | Know today's weekday | 1. Open `/`. 2. Read the Today's Dham card. | The day name equals today's weekday, and the thali title/price match that day in `/menu.html` (e.g. Sunday → *The Grand Shadi Wali Dham*, ₹299). |
 | KD-034 | Today's Dham data comes from the API | P2 | Functional | DevTools Network open | 1. Reload `/`. 2. Find the `/api/menu` request. | Request returns HTTP 200 with `{"menu":[…],"override":…}`; the card content matches the API payload. |
 | KD-035 | Today's Dham fallback when API fails | P2 | Negative | DevTools open | 1. DevTools → Network → block the URL `*/api/menu`. 2. Reload `/`. | The card still renders correct content from the bundled fallback (`js/menu-data.js`). **No blank card, no JS error visible to the user.** |
@@ -376,7 +376,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 | Test ID | Title | Priority | Type | Pre-conditions | Steps | Expected Result |
 |---|---|---|---|---|---|---|
 | KD-050 | Menu page opens on today's tab | P1 | Functional | — | 1. Open `/menu.html` with no query string. | The tab for today's weekday is pre-selected and its thali is displayed. |
-| KD-051 | All 7 day tabs switch content | P1 | Functional | — | 1. Click each tab Sun→Sat in turn. 2. Read the thali title each time. | Sun *The Grand Shadi Wali Dham* ₹299 · Mon *The Classic Comfort* · Tue *The Wholesome Feast* · Wed *The Royal Delicacy* · Thu *The Fragrant Mid-Week* · Fri *The Festive Friday* · Sat *The Weekend Warmup* — Mon–Sat priced ₹200–₹250. Content swaps without a page reload. |
+| KD-051 | All 7 day tabs switch content | P1 | Functional | — | 1. Click each tab Sun→Sat in turn. 2. Read the thali title each time. | Sun *The Grand Shadi Wali Dham* · Mon *The Classic Comfort* · Tue *The Wholesome Feast* · Wed *The Royal Delicacy* · Thu *The Fragrant Mid-Week* · Fri *The Festive Friday* · Sat *The Weekend Warmup* — every day priced **₹299**. Content swaps without a page reload. |
 | KD-052 | Tab click updates the URL | P2 | Functional | — | 1. Click the Friday tab. 2. Look at the address bar. | URL becomes `/menu.html?day=5` via `history.replaceState` (no new history entry added). |
 | KD-053 | `?day=` deep link works | P1 | Functional | — | 1. Open `/menu.html?day=0` directly. 2. Then `?day=6`. | `day=0` shows Sunday, `day=6` shows Saturday, with the matching tab active. |
 | KD-054 | Invalid `?day=` value | P2 | Negative | — | 1. Open `/menu.html?day=9`. 2. Then `/menu.html?day=abc`. 3. Then `/menu.html?day=-1`. | Page loads without error and falls back to today's day (or Sunday). No blank content, no JS exception. |
@@ -388,7 +388,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 | KD-060 | ⚠️ Menu WhatsApp order CTA | P1 | Functional | Owner approval; real phone | 1. On a phone, tap the WhatsApp order button. 2. **Read the pre-filled text. DO NOT press Send.** 3. Close WhatsApp. | WhatsApp opens a chat with **+91 7011376087** with an order message pre-filled. Check the text names "The Kangra Dham Co." — see KD-063. |
 | KD-061 | Menu page API/fallback parity | P2 | Functional | DevTools | 1. Block `*/api/menu`. 2. Reload `/menu.html`. 3. Cycle all 7 tabs. | All 7 days still render from the bundled fallback with identical titles and prices. |
 | KD-062 | Menu matches the API payload | P2 | Functional | — | 1. Open `https://kangradham.kran-apps.cloud/api/menu` in a tab. 2. Compare all 7 entries with the Menu page. | Titles, prices, madra, khatta and notes match exactly. |
-| KD-063 | **Old brand name in WhatsApp text** | P2 | Content | — | 1. Inspect the `wa.me` links on `/contact.html` and `/order.html` (right-click → Copy link address). | **Known defect:** some pre-filled texts still say **"Kangra Dham Express"** instead of "The Kangra Dham Co." Raise as S3. |
+| KD-063 | Brand name in WhatsApp text | P2 | Content | — | 1. Inspect the `wa.me` links on `/contact.html`, `/menu.html` and `/order.html` (right-click → Copy link address). | **Fixed:** every pre-filled text now says "The Kangra Dham Co." Any reappearance of "Kangra Dham Express" is a regression (S3). |
 
 ### 7.4 Our Heritage, Gallery, Stories, Privacy
 
@@ -396,7 +396,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 |---|---|---|---|---|---|---|
 | KD-070 | About page content | P2 | Content | — | 1. Open `/about.html` and read top to bottom. | Heritage narrative renders fully; headings in order; images load; no lorem/placeholder text; no spelling errors in the brand name. |
 | KD-071 | About page images | P3 | UI | — | 1. Inspect each image. | All load over HTTPS with non-empty `alt` text. |
-| KD-072 | Gallery placeholders | P2 | UI | — | 1. Open `/gallery.html`. | **Known state:** four `gallery-placeholder` tiles with a camera icon and "coming soon" copy — no real photos yet. Confirm this is intentional. **[CONFIRM WITH OWNER]** |
+| KD-072 | Gallery honesty | P2 | UI | — | 1. Open `/gallery.html`. | **Fixed:** no placeholder tiles remain. Every tile is a real licensed stock / Creative Commons photograph, and the closing note states plainly that the business's own photography is still to come. |
 | KD-073 | Gallery layout on mobile | P3 | UI | 390 px viewport | 1. Open `/gallery.html` at 390 px. | Tiles stack or wrap cleanly; no horizontal scrollbar; icons centred. |
 | KD-074 | Stories page content | P3 | Content | — | 1. Open `/stories.html`. | Story articles render with headings and body copy; any links work. **[CONFIRM WITH OWNER]** that stories are genuine/approved. |
 | KD-075 | Privacy policy content | P2 | Content | — | 1. Open `/privacy.html`. | Policy renders; mentions what data the forms collect (name, email, phone, message) and how to contact the business; no placeholder text. **[CONFIRM WITH OWNER]** that the policy text is legally approved. |
@@ -420,7 +420,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 |---|---|---|---|---|---|---|
 | KD-090 | Corporate pricing cards | P1 | Content | — | 1. Open `/corporate.html`. 2. Read every price. | **₹200–₹250 per meal**, **₹1,099 per week (6 days)**, **₹3,999 per month (26 days)**. Verify against the owner's price list. |
 | KD-091 | Catering subscription cards | P1 | Content | — | 1. Open `/catering.html`. 2. Read every price. | **₹179 / ₹169 / ₹159 per thali**. Verify against the owner's price list. |
-| KD-092 | **Catering vs Corporate price conflict** | P1 | Content | — | 1. Compare KD-090 and KD-091 side by side. | **Known inconsistency:** Catering advertises ₹179/₹169/₹159 per thali while Corporate advertises ₹200–₹250 per meal. A customer can see two different prices for what looks like the same offer. Raise as S2. **[CONFIRM WITH OWNER]** which is correct. |
+| KD-092 | Catering vs Corporate pricing is clearly labelled | P1 | Content | — | 1. Compare KD-090 and KD-091 side by side. | **By design (owner decision):** Corporate ₹200–₹250/meal is a higher-touch office-delivery service; Catering ₹179/₹169/₹159 are bulk tiers. Both pages now say so explicitly and name the ₹299 walk-in thali, so the three price sets cannot be mistaken for each other. |
 | KD-093 | Corporate weekly/monthly maths | P2 | Content | — | 1. Divide ₹1,099 by 6 and ₹3,999 by 26. | ≈ ₹183/meal and ≈ ₹154/meal — check these are consistent with the advertised per-meal range. Flag if misleading. **[CONFIRM WITH OWNER]** |
 | KD-094 | Corporate CTA works | P2 | Functional | — | 1. Click the corporate call-to-action. | Navigates to the catering enquiry form or opens WhatsApp (⚠️ if WhatsApp). |
 | KD-095 | Catering package descriptions | P3 | Content | — | 1. Read what each package includes. | Inclusions, minimum order quantities and notice periods are stated and accurate. **[CONFIRM WITH OWNER]** |
@@ -430,7 +430,7 @@ Priority: **P1** blocker/critical · **P2** major · **P3** minor/cosmetic.
 | Test ID | Title | Priority | Type | Pre-conditions | Steps | Expected Result |
 |---|---|---|---|---|---|---|
 | KD-100 | Order page renders all options | P1 | UI | — | 1. Open `/order.html`. | The WhatsApp, Call and Walk-in option cards all render with clear instructions. |
-| KD-101 | ⚠️ WhatsApp order link | P1 | Functional | Real phone; owner approval | 1. Tap the WhatsApp order button. 2. Verify number and pre-filled text. 3. **Do not send.** | Chat with +91 7011376087 opens, message pre-filled. Check for the old "Kangra Dham Express" wording (KD-063). |
+| KD-101 | ⚠️ WhatsApp order link | P1 | Functional | Real phone; owner approval | 1. Tap the WhatsApp order button. 2. Verify number and pre-filled text. 3. **Do not send.** | Chat with +91 7011376087 opens, message pre-filled with "The Kangra Dham Co." (KD-063). |
 | KD-102 | ⚠️ Call-to-order link | P1 | Functional | Real phone; owner approval | 1. Tap the call option. 2. Verify `+91 7011376087`. 3. **Cancel.** | Dialler opens with the correct number. |
 | KD-103 | ⚠️⚠️ UPI payment intent | P1 | Functional | Real phone with a UPI app; **explicit owner approval** | 1. Tap the UPI pay link. 2. Read the payee shown by the UPI app. 3. **Press Back / Cancel immediately. Do NOT enter an amount or PIN.** | The UPI app opens showing payee name **The Kangra Dham Co** and UPI ID **7011376087@upi**, with no amount pre-filled. No money moves. |
 | KD-104 | UPI link on desktop | P3 | Negative | Desktop browser | 1. Click the UPI link on desktop. | Either nothing happens or the browser shows a "no app to handle upi://" dialog — it must **not** produce a broken page or a JS error. |
@@ -582,10 +582,10 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 
 | Test ID | Item | Value currently on the site | Where it appears | Matches owner? (Y/N) | Notes |
 |---|---|---|---|---|---|
-| KD-400 | Business name | The Kangra Dham Co. | Everywhere | | Watch for the old name "Kangra Dham Express" |
+| KD-400 | Business name | The Kangra Dham Co. | Everywhere | | The old name "Kangra Dham Express" is gone — any sighting is a regression |
 | KD-401 | Street address | Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway | Footer, Locations, Home Find Us, JSON-LD | | |
 | KD-402 | PIN code | 201305 | Footer, Locations, JSON-LD | | |
-| KD-403 | **Menu page footer address** | **Sector 62, Noida, UP 201301** | `/menu.html` footer only | | ❌ Known conflict — see KD-009 |
+| KD-403 | Menu page footer address | Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway | `/menu.html` footer | | ✅ Now matches KD-401 — see KD-009 |
 | KD-404 | Phone number | +91 7011376087 | Footer, Contact, Locations, Order, all `tel:` links | | |
 | KD-405 | WhatsApp number | 917011376087 | All `wa.me` links | | Must be the same as KD-404 |
 | KD-406 | Email address | kapil8583@gmail.com | Footer, Contact | | A personal Gmail — **[CONFIRM WITH OWNER]** whether a business address should be used |
@@ -599,12 +599,12 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 | KD-414 | Price range | ₹₹ | JSON-LD | | |
 | KD-415 | Accepts reservations | False | JSON-LD | | **[CONFIRM WITH OWNER]** — catering bookings arguably are reservations |
 | KD-416 | Sunday thali | The Grand Shadi Wali Dham — **₹299** | Menu, Home week preview | | The only day above ₹250 |
-| KD-417 | Monday thali | The Classic Comfort — ₹200–₹250 | Menu | | Confirm exact price |
-| KD-418 | Tuesday thali | The Wholesome Feast — ₹200–₹250 | Menu | | |
-| KD-419 | Wednesday thali | The Royal Delicacy — ₹200–₹250 | Menu | | |
-| KD-420 | Thursday thali | The Fragrant Mid-Week — ₹200–₹250 | Menu | | |
-| KD-421 | Friday thali | The Festive Friday — ₹200–₹250 | Menu | | |
-| KD-422 | Saturday thali | The Weekend Warmup — ₹200–₹250 | Menu | | |
+| KD-417 | Monday thali | The Classic Comfort — ₹299 | Menu | | |
+| KD-418 | Tuesday thali | The Wholesome Feast — ₹299 | Menu | | |
+| KD-419 | Wednesday thali | The Royal Delicacy — ₹299 | Menu | | |
+| KD-420 | Thursday thali | The Fragrant Mid-Week — ₹299 | Menu | | |
+| KD-421 | Friday thali | The Festive Friday — ₹299 | Menu | | |
+| KD-422 | Saturday thali | The Weekend Warmup — ₹299 | Menu | | |
 | KD-423 | Fixed daily items | Steamed Basmati Rice, Spiced Yogurt Palda, Desi Ghee Drizzle, Meetha Bhat | Menu | | |
 | KD-424 | Madra & Khatta per day | 7 distinct pairs | Menu | | Check each day's dish names are spelled correctly |
 | KD-425 | Pahadi Siddu | ₹80 | Menu sides | | |
@@ -615,13 +615,13 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 | KD-430 | Lingad Pickle 250g | ₹220 | Menu retail | | |
 | KD-431 | Kangra Loose Leaf Tea Packets | ₹180–₹350 | Menu retail | | |
 | KD-432 | Catering subscription prices | ₹179 / ₹169 / ₹159 per thali | `/catering.html` | | ❌ Conflicts with KD-433 — see KD-092 |
-| KD-433 | Corporate per-meal price | ₹200–₹250 | `/corporate.html` | | ❌ Conflicts with KD-432 |
+| KD-433 | Corporate per-meal price | ₹200–₹250 | `/corporate.html` | | ✅ Intentionally different from KD-432 — labelled as an office-delivery rate |
 | KD-434 | Corporate weekly price | ₹1,099 (6 days) | `/corporate.html` | | |
 | KD-435 | Corporate monthly price | ₹3,999 (26 days) | `/corporate.html` | | |
-| KD-436 | Hero stat | "₹200 Unlimited Thali" | Home hero | | ❌ Sunday is ₹299 — see KD-032 |
-| KD-437 | Social media links | **None — "Follow Us" has no links** | Footer, all pages | | ❌ See KD-011; ask the owner for Instagram/Facebook URLs |
+| KD-436 | Hero stat | "₹299 Unlimited Thali" | Home hero | | ✅ Matches every menu day and the testimonial |
+| KD-437 | Social media links | **None — the empty social area has been removed** | Footer, all pages | | Ask the owner for Instagram/Facebook URLs before re-adding — see KD-011 |
 | KD-438 | Testimonials | Quotes on Home and `/stories.html` | Home, Stories | | **[CONFIRM WITH OWNER]** that these are real and consented |
-| KD-439 | Gallery photos | 4 placeholder tiles, "coming soon" | `/gallery.html` | | **[CONFIRM WITH OWNER]** |
+| KD-439 | Gallery photos | Licensed stock / CC imagery only, with a "coming soon" note for original photography | `/gallery.html` | | **[CONFIRM WITH OWNER]** |
 | KD-440 | Privacy policy | Policy text | `/privacy.html` | | **[CONFIRM WITH OWNER]** legally reviewed |
 | KD-441 | Delivery area / minimum order | As stated on `/order.html` | `/order.html` | | **[CONFIRM WITH OWNER]** |
 | KD-442 | Food-type claims (veg/jain/allergens) | As written in the copy | Menu, Home | | **[CONFIRM WITH OWNER]** — allergen accuracy matters legally |
@@ -636,22 +636,22 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 | KD-500 | Home page title | P1 | SEO | — | 1. Open `/`. 2. Read the browser tab / `<title>`. | Exactly **"The Kangra Dham Co. \| Authentic Himachali Food in Noida"**. |
 | KD-501 | Unique title on every page | P1 | SEO | — | 1. Visit all 11 public pages and note each `<title>`. | Every page has a distinct, descriptive title mentioning the brand. No duplicates, none empty, none over ~60 characters. |
 | KD-502 | Meta description on every page | P1 | SEO | DevTools | 1. On each page run `document.querySelector('meta[name=description]').content`. | Present, unique, 120–160 characters, no placeholder text. |
-| KD-503 | **Canonical URLs point to an IP address** | P1 | SEO | DevTools | 1. On `/about.html` run `document.querySelector('link[rel=canonical]').href`. 2. Repeat on catering, contact, corporate, gallery, locations, menu, order, stories. | **Known defect:** these nine pages have `<link rel="canonical" href="https://201.18.209.226/…">` — a raw IP, not the real domain. Only `/` and `/privacy.html` use `https://kangradham.kran-apps.cloud/`. This can de-index the site. **Raise as S1/S2 SEO bug.** |
+| KD-503 | Canonical URLs | P1 | SEO | DevTools | 1. On `/about.html` run `document.querySelector('link[rel=canonical]').href`. 2. Repeat on catering, contact, corporate, gallery, locations, menu, order, stories, privacy and `/`. | **Fixed:** all 11 public pages are self-canonical on `https://kangradham.kran-apps.cloud/<page>`. No raw IP (`201.18.209.226`) or alias host remains anywhere in the markup. Any IP canonical is a regression (S1/S2). |
 | KD-504 | Open Graph tags | P1 | SEO | DevTools | 1. On `/` check `og:title`, `og:description`, `og:image`, `og:url`, `og:type`. | All present; `og:image` returns HTTP 200 and is at least 600×315; `og:url` uses the real domain (not an IP). |
 | KD-505 | Twitter card tags | P2 | SEO | DevTools | 1. Check `twitter:card`, `twitter:title`, `twitter:description`, `twitter:image`. | Present and consistent with the OG tags. |
 | KD-506 | Social preview renders | P2 | SEO | — | 1. Paste `https://kangradham.kran-apps.cloud` into a WhatsApp chat **with yourself** (never the business number) or a link-preview debugger. | A preview card appears with the correct title, description and image. |
 | KD-507 | Favicon | P2 | SEO | — | 1. Look at the browser tab on every page. | A favicon loads (not the default blank page icon) and is identical site-wide. |
 | KD-508 | JSON-LD structured data | P1 | SEO | DevTools | 1. View source and find the `application/ld+json` block on `/`. 2. Paste it into Google's Rich Results Test. | Valid `Restaurant` schema with correct name, address (Sector 137, 201305), telephone, geo (28.5151/77.3939), `openingHours`, `priceRange ₹₹`. No validation errors. |
 | KD-509 | `robots.txt` | P2 | SEO | — | 1. Open `/robots.txt`. | Returns 200; allows the public pages; disallows `/admin.html` and `/api/`; references the sitemap with the real domain. |
-| KD-510 | `sitemap.xml` | P2 | SEO | — | 1. Open `/sitemap.xml`. 2. Open each URL it lists. | Valid XML; every URL returns 200; all use `https://kangradham.kran-apps.cloud`; `/admin.html` and `/offline.html` are **not** listed. |
+| KD-510 | `sitemap.xml` | P2 | SEO | — | 1. Open `/sitemap.xml`. 2. Open each URL it lists. | Valid XML; 11 URLs including `/corporate.html` and `/stories.html`; every URL returns 200; all use `https://kangradham.kran-apps.cloud`; `/admin.html`, `/offline.html` and `/404.html` are **not** listed. |
 | KD-511 | Heading structure | P2 | SEO/A11y | DevTools | 1. On each page list the headings in order. | Exactly one `<h1>` per page, and heading levels descend without skipping (h1 → h2 → h3). |
 | KD-512 | Image alt text | P1 | SEO/A11y | DevTools | 1. On each page run `[...document.images].filter(i=>!i.alt)`. | The list is empty — every content image has meaningful alt text (decorative images may use `alt=""`). |
-| KD-513 | No broken internal links | P1 | Functional | — | 1. Crawl the site (e.g. a link checker) or click every link on all 11 pages. | No link returns 404/500. Remember: a broken internal link renders the **offline page body with a 404 status**, which is easy to miss — check the status code in DevTools. |
+| KD-513 | No broken internal links | P1 | Functional | — | 1. Crawl the site (e.g. a link checker) or click every link on all 11 pages. | No link returns 404/500. Remember: a broken internal link renders the **404 page body with a 404 status** — check the status code in DevTools, not just the look of the page. |
 | KD-514 | No broken external links | P2 | Functional | — | 1. Click/inspect every external link (map, image hosts, social links if added). | All resolve; all open in a new tab with `rel="noopener noreferrer"`. |
 | KD-515 | External image hosts load | P2 | Performance | DevTools Network | 1. Hard-reload `/` and `/menu.html`. 2. Filter by `Img` and sort by time. | Images from `upload.wikimedia.org`, `images.pexels.com` and `cdn.pixabay.com` all return 200. Flag any image over **300 kB** or taking over **3 s**. Note the dependency on third-party hosts as a reliability risk. |
 | KD-516 | Lighthouse — Performance | P2 | Performance | Chrome DevTools | 1. Run Lighthouse (Mobile, Performance) on `/`. | Score ≥ 80. Record LCP (target < 2.5 s), CLS (< 0.1) and TBT. Repeat for `/menu.html`. |
 | KD-517 | Lighthouse — Accessibility | P2 | A11y | Chrome DevTools | 1. Run Lighthouse (Accessibility) on `/`, `/menu.html`, `/contact.html`. | Score ≥ 90; log every contrast and label failure individually. |
-| KD-518 | Lighthouse — SEO | P1 | SEO | Chrome DevTools | 1. Run Lighthouse (SEO) on every public page. | Score ≥ 90. The canonical defect (KD-503) will likely surface here. |
+| KD-518 | Lighthouse — SEO | P1 | SEO | Chrome DevTools | 1. Run Lighthouse (SEO) on every public page. | Score ≥ 90. Canonicals are now correct (KD-503), so a canonical warning here is a regression. |
 | KD-519 | Lighthouse — Best Practices / PWA | P3 | Performance | Chrome DevTools | 1. Run Lighthouse Best Practices on `/`. | Score ≥ 90; no mixed content; no deprecated APIs; the manifest is detected and the app is installable. |
 | KD-520 | Security headers | P2 | Functional | DevTools Network | 1. Inspect the response headers for `/`. | `Content-Security-Policy`, `Strict-Transport-Security`, `X-Content-Type-Options: nosniff` are present (helmet). No CSP violations in the console. |
 | KD-521 | `/api/health` | P2 | Functional | — | 1. Open `/api/health`. | HTTP 200 with `{"status":"ok","database":"ok"}`. |
@@ -687,7 +687,7 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 |---|---|---|---|---|---|---|
 | KD-620 | ⚠️ Click-to-call on Android | P1 | Functional | Android phone; owner approval | 1. Tap every `tel:` link (footer, Contact, Locations, Order). 2. **Cancel each before dialling.** | The dialler opens pre-filled with `+91 7011376087` every time. |
 | KD-621 | ⚠️ Click-to-call on iPhone | P1 | Functional | iPhone; owner approval | 1. Repeat KD-620 on iOS. | Same result. |
-| KD-622 | ⚠️ Click-to-WhatsApp on Android | P1 | Functional | Android + WhatsApp; owner approval | 1. Tap every WhatsApp link across the site. 2. Check the number and pre-filled text. 3. **Do not send.** | Each opens a chat with +91 7011376087 with a sensible, correctly-branded pre-filled message. Log any that still say "Kangra Dham Express". |
+| KD-622 | ⚠️ Click-to-WhatsApp on Android | P1 | Functional | Android + WhatsApp; owner approval | 1. Tap every WhatsApp link across the site. 2. Check the number and pre-filled text. 3. **Do not send.** | Each opens a chat with +91 7011376087 with a sensible, correctly-branded pre-filled message ("The Kangra Dham Co."). Log any that say "Kangra Dham Express" — that would be a regression. |
 | KD-623 | ⚠️ Click-to-WhatsApp on iPhone | P1 | Functional | iPhone + WhatsApp | 1. Repeat KD-622 on iOS. | Same result. |
 | KD-624 | WhatsApp link on desktop | P2 | Functional | Desktop | 1. Click a WhatsApp link on desktop. | `web.whatsapp.com` opens in a **new tab** with the chat pre-filled; the original page is still open behind it. |
 | KD-625 | ⚠️ Email link | P2 | Functional | — | 1. Click the email address in the footer. 2. **Close the mail client without sending.** | The default mail client opens a new message addressed to `kapil8583@gmail.com`. |
@@ -700,8 +700,8 @@ Ask the owner for a single **source-of-truth sheet** and tick every row below ag
 | KD-641 | Back after a menu tab change | P2 | Functional | — | 1. On `/menu.html` click 3 different day tabs. 2. Press Back once. | Because the code uses `history.replaceState`, Back returns to the **previous page**, not the previous tab. Confirm this is acceptable. **[CONFIRM WITH OWNER]** |
 | KD-642 | Refresh preserves state | P2 | Functional | — | 1. Open `/menu.html?day=4`. 2. Press F5. | The Thursday tab is still selected after the reload. |
 | KD-643 | Deep link shareability | P2 | Functional | — | 1. Copy `/menu.html?day=2` and open it in a different browser. | Tuesday's thali is shown. |
-| KD-644 | 404 behaviour | P1 | Negative | — | 1. Open `https://kangradham.kran-apps.cloud/does-not-exist`. 2. Check the status code in DevTools. | **Known defect:** the status is **404** but the page body is `offline.html` — "You're offline right now…" — which wrongly tells the user their internet is down. Expected: a proper "Page not found" page with a link Home. Raise as **S2**. |
-| KD-645 | Directory traversal blocked | P2 | Negative | — | 1. Request `/../server.js`, `/lib/database.js`, `/.env`, `/data/menu.json`, `/package.json`. | Each returns 404 (the server serves only an allow-list of root files). **No source code, `.env` or database file is ever served.** |
+| KD-644 | 404 behaviour | P1 | Negative | — | 1. Open `https://kangradham.kran-apps.cloud/does-not-exist`. 2. Check the status code in DevTools. | **Fixed:** status **404** with the body of `404.html` — "We couldn't find that page" plus a Home button and links to Menu, Order, Find Us, Catering and Contact. It must **not** say "You're offline". |
+| KD-645 | Directory traversal blocked | P2 | Negative | — | 1. Request `/../server.js`, `/lib/database.js`, `/.env`, `/data/menu.json`, `/package.json`. | Each returns 404 with the `404.html` body (the server serves only an allow-list of root files). **No source code, `.env` or database file is ever served.** |
 | KD-646 | Database file not exposed | P1 | Negative | — | 1. Request `/kangra.db`, `/data/app.db`, `/data/`. | 404. No SQLite file is downloadable. |
 | KD-647 | Offline page via service worker | P2 | Functional | — | 1. Load `/`. 2. DevTools → Network → **Offline**. 3. Navigate to another page. | The offline fallback page renders with a friendly message; the browser's native error page is not shown. |
 | KD-648 | Service worker does not cache the API | P2 | Functional | DevTools Application | 1. Load the site, then inspect Cache Storage `kangra-dham-v5`. | No `/api/` responses are cached — the menu is always fetched fresh. |
@@ -744,7 +744,7 @@ Run this ordered subset after every deployment. **None of these steps sends a re
 | 13 | KD-203 | Submit the empty contact form | Blocked by validation (nothing is sent) |
 | 14 | KD-301 | Open `/api/admin/enquiries` in incognito | HTTP 401, no data |
 | 15 | KD-300 | Open `/admin.html` in incognito | Login form only |
-| 16 | KD-644 | Open `/does-not-exist` | 404 returned (note the offline-page body defect) |
+| 16 | KD-644 | Open `/does-not-exist` | 404 returned, showing the "Page not found" body |
 | 17 | KD-046 | Check the console on Home | No JS errors, no CSP violations |
 | 18 | KD-500 | Check the page title | "The Kangra Dham Co. \| Authentic Himachali Food in Noida" |
 | 19 | KD-600 | View Home at 360 px | No horizontal scroll, nav collapses |
@@ -762,7 +762,7 @@ Do **not** raise these as defects.
 2. **No online payment or shopping cart.** Ordering is WhatsApp, phone, walk-in or a manual UPI transfer. There is no checkout, cart, quantity selector, order tracking or order history.
 3. **No customer accounts.** There is no signup, login, profile or password reset for customers. The only login is the owner's admin password.
 4. **Admin has no username.** A single shared password is by design; so is the absence of multi-user roles, 2FA, audit logs and "forgot password".
-5. **Gallery placeholders.** The four camera-icon tiles are a known pending content task, not a bug (confirm with the owner).
+5. **Gallery imagery is licensed stock/CC, not the business's own photos.** The page says so explicitly; replacing it with original photography is a pending content task, not a bug.
 6. **Loyalty/rewards "Coming Soon".** Intentionally non-functional.
 7. **Hindi translation is partial.** Only Home, Our Heritage, The Menu, Corporate and Stories have the toggle. Report the gap once (KD-020), not per page.
 8. **Images hosted externally.** Photos come from Wikimedia, Pexels and Pixabay. Occasional slowness from those CDNs is an infrastructure characteristic — report only outright failures.
@@ -782,8 +782,8 @@ Do **not** raise these as defects.
 | Severity | Meaning | Examples on this site |
 |---|---|---|
 | **S1 — Critical** | Site down, data loss, security breach, or customers cannot order at all | Site returns 5xx; `/api/admin/enquiries` returns data without logging in; enquiries are not saved; WhatsApp/phone number is wrong so orders go nowhere; XSS executes |
-| **S2 — Major** | A core journey is broken or a customer could be materially misled | Contact/catering form fails to submit; a menu day shows the wrong price; contradictory prices between Catering and Corporate; wrong address in the Menu footer; the 404 page claims the user is offline; canonical tags pointing at a raw IP |
-| **S3 — Minor** | Noticeable but has a workaround, or is cosmetic with business impact | Empty "Follow Us" social area; old "Kangra Dham Express" wording in WhatsApp text; "₹200 Unlimited Thali" vs ₹299 Sunday; missing alt text; Hindi toggle missing on some pages; layout glitch at one breakpoint |
+| **S2 — Major** | A core journey is broken or a customer could be materially misled | Contact/catering form fails to submit; a menu day shows the wrong price; unlabelled contradictory prices between the thali, Catering and Corporate; wrong address in the Menu footer; the 404 page claiming the user is offline; canonical tags pointing at a raw IP |
+| **S3 — Minor** | Noticeable but has a workaround, or is cosmetic with business impact | An empty "Follow Us" social area; old "Kangra Dham Express" wording in WhatsApp text; a hero price that disagrees with the menu; missing alt text; Hindi toggle missing on some pages; layout glitch at one breakpoint |
 | **S4 — Trivial** | Cosmetic only, no business impact | Minor spacing/alignment, slightly inconsistent button padding, a stray typo in body copy |
 
 ### 15.2 Priority guidance
@@ -841,22 +841,22 @@ Do **not** raise these as defects.
 5. For every test that touched a ⚠️ channel, list in the report the **enquiry IDs created**, the **time of any WhatsApp/phone contact**, and confirm that every submitted text was prefixed `TEST — PLEASE IGNORE`.
 6. At the end of the run, send the owner: (a) the list of test enquiry IDs to delete, (b) confirmation that any admin menu/override changes were restored, (c) confirmation that no payment was made.
 
-### 15.5 Known defects already identified from the source code
+### 15.5 Known defects identified from the source code
 
-Raise these as tickets up front unless the owner has already accepted them.
+Items 1–7 and 9 were fixed in the content/SEO correctness pass. Re-test them as **regression checks**; raise the remaining open items as tickets unless the owner has already accepted them.
 
-| # | Defect | Test ID | Suggested severity |
-|---|---|---|---|
-| 1 | Canonical tags on 9 pages point to `https://201.18.209.226/…` instead of the real domain | KD-503 | S2 (SEO-critical) |
-| 2 | Menu page footer shows "Sector 62, Noida, UP 201301" instead of Sector 137 / 201305 | KD-009 | S2 |
-| 3 | Catering (₹179/₹169/₹159 per thali) contradicts Corporate (₹200–₹250 per meal) | KD-092 | S2 |
-| 4 | Unknown URLs return the offline page body ("You're offline right now…") instead of a 404 page | KD-644 | S2 |
-| 5 | WhatsApp pre-filled text still says "Kangra Dham Express" on some pages | KD-063 | S3 |
-| 6 | "Follow Us" social links container is empty on every page | KD-011 | S3 |
-| 7 | Home hero claims "₹200 Unlimited Thali" while Sunday is ₹299 | KD-032 | S3 |
-| 8 | Hindi toggle missing on Contact, Catering, Gallery, Find Us, Order and Privacy | KD-020 | S3 |
-| 9 | Gallery shows four placeholder tiles instead of photographs | KD-072 | S3 (content task) |
-| 10 | Business email is a personal Gmail address (`kapil8583@gmail.com`) | KD-406 | S3 (advisory) |
+| # | Defect | Test ID | Suggested severity | Status |
+|---|---|---|---|---|
+| 1 | Canonical tags on 9 pages point to `https://201.18.209.226/…` instead of the real domain | KD-503 | S2 (SEO-critical) | ✅ Fixed — all pages self-canonical on the primary domain |
+| 2 | Menu page footer shows "Sector 62, Noida, UP 201301" instead of Sector 137 / 201305 | KD-009 | S2 | ✅ Fixed |
+| 3 | Catering (₹179/₹169/₹159 per thali) appears to contradict Corporate (₹200–₹250 per meal) | KD-092 | S2 | ✅ Fixed — both are intentional and are now explicitly labelled as different services |
+| 4 | Unknown URLs return the offline page body ("You're offline right now…") instead of a 404 page | KD-644 | S2 | ✅ Fixed — dedicated `404.html` |
+| 5 | WhatsApp pre-filled text still says "Kangra Dham Express" on some pages | KD-063 | S3 | ✅ Fixed |
+| 6 | "Follow Us" social links container is empty on every page | KD-011 | S3 | ✅ Fixed — empty social area removed; real URLs still needed from the owner |
+| 7 | Home hero claims "₹200 Unlimited Thali" while the thali is ₹299 | KD-032 | S3 | ✅ Fixed — ₹299 site-wide |
+| 8 | Hindi toggle missing on Contact, Catering, Gallery, Find Us, Order and Privacy | KD-020 | S3 | ⬜ Open |
+| 9 | Gallery shows placeholder tiles instead of photographs | KD-072 | S3 (content task) | ✅ Fixed — placeholders removed; original photography still pending |
+| 10 | Business email is a personal Gmail address (`kapil8583@gmail.com`) | KD-406 | S3 (advisory) | ⬜ Open — owner's decision, deliberately left unchanged |
 
 ---
 

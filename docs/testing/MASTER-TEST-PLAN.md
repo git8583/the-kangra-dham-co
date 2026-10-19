@@ -316,9 +316,9 @@ These were found by **reading the source code**, before any testing began.
 | **Chessary** | No URL router — browser **Back does not change tabs** and exits the app. |
 | **Voyagr** | Prefill callout still says "cities, dates and travellers" although it now also applies interests, pace and budget. |
 | **Voyagr** | No password reset exists. |
-| **Kangra Dham** | Canonical URLs use the **raw IP address** on 9 pages. |
-| **Kangra Dham** | **₹200 vs ₹299** hero price conflict; catering vs corporate price conflict. |
-| **Kangra Dham** | Stale **"Kangra Dham Express"** branding in WhatsApp text; empty social links; `offline.html` served as the 404 page; Sector 62 footer on `menu.html`; partial Hindi; gallery placeholders; personal Gmail address. |
+| **Kangra Dham** | ~~Canonical URLs use the **raw IP address** on 9 pages.~~ Fixed — every page is self-canonical on `https://kangradham.kran-apps.cloud`. |
+| **Kangra Dham** | ~~**₹200 vs ₹299** hero price conflict; catering vs corporate price conflict.~~ Fixed — unlimited thali is ₹299 site-wide; corporate (₹200–₹250/meal) and catering (₹159–₹179/thali) are now explicitly labelled as different services. |
+| **Kangra Dham** | ~~Stale **"Kangra Dham Express"** branding in WhatsApp text; empty social links; `offline.html` served as the 404 page; Sector 62 footer on `menu.html`; gallery placeholders.~~ All fixed. Still open: partial Hindi; personal Gmail address (owner's decision). |
 | **SmashPoint** | `surge` devDependency still present in `package.json`/lockfile; `.github/copilot-instructions.md` still describes a Surge deployment policy. |
 
 ### Configuration to confirm before testing

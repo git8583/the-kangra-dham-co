@@ -228,7 +228,7 @@ app.put('/api/admin/menu', requireAdmin, requireCsrf, (req, res) => {
 const allowedRootFiles = new Set([
     'index.html', 'about.html', 'admin.html', 'catering.html', 'contact.html', 'corporate.html',
     'gallery.html', 'locations.html', 'menu.html', 'offline.html', 'order.html', 'stories.html',
-    'privacy.html', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js', 'favicon.svg', 'favicon.ico'
+    'privacy.html', '404.html', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js', 'favicon.svg', 'favicon.ico'
 ]);
 app.use('/css', express.static(path.join(ROOT, 'css'), { maxAge: IS_PRODUCTION ? '1h' : 0 }));
 app.use('/js', express.static(path.join(ROOT, 'js'), { maxAge: IS_PRODUCTION ? '1h' : 0 }));
@@ -241,7 +241,7 @@ app.get('/:file', (req, res, next) => {
 });
 app.use((req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found.' });
-    res.status(404).sendFile(path.join(ROOT, 'offline.html'));
+    res.status(404).sendFile(path.join(ROOT, '404.html'));
 });
 app.use((error, req, res, next) => {
     console.error(error);

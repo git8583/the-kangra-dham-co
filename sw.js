@@ -1,7 +1,7 @@
 // The Kangra Dham Co. - Service Worker
 // Provides offline support and caching
 
-const CACHE_NAME = 'kangra-dham-v5';
+const CACHE_NAME = 'kangra-dham-v6';
 const OFFLINE_URL = 'offline.html';
 
 const PRECACHE_URLS = [
@@ -10,6 +10,7 @@ const PRECACHE_URLS = [
     'menu.html',
     'about.html',
     'privacy.html',
+    'offline.html',
     'css/style.css',
     'js/main.js',
     'js/menu-data.js',
@@ -77,8 +78,10 @@ self.addEventListener('fetch', event => {
     if (request.destination === 'document' || url.pathname.endsWith('.html')) {
         event.respondWith(
             fetch(request).then(response => {
-                const clone = response.clone();
-                caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+                if (response.ok) {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+                }
                 return response;
             }).catch(() => {
                 return caches.match(request).then(cached => cached || caches.match(OFFLINE_URL));

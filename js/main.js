@@ -1,5 +1,5 @@
 // ========================================
-// Kangra Dham Express - Main JavaScript
+// The Kangra Dham Co. - Main JavaScript
 // ========================================
 
 document.addEventListener('DOMContentLoaded', async function() {
