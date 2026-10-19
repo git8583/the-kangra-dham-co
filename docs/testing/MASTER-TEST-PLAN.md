@@ -280,46 +280,48 @@ Overall recommendation:  Ready for use  /  Fix S1-S2 first  /  Not ready
 
 These were found by **reading the source code**, before any testing began.
 
-> **Status note (19 Oct 2026):** the issues marked ✅ below have been **fixed and pushed to the repositories**, but at the time of writing they had **not been redeployed**, so the **live apps may still show the old behaviour**. Confirm the deployed version before raising — or closing — any of these. Everything marked ⬜ is still outstanding.
+> **Status note (19 Oct 2026):** everything marked ✅ below is now **fixed, pushed and deployed to the live sites**, and each one was re-checked against production after deployment. Treat the matching test cases as **regression checks** — they are expected to **pass**. Everything marked ⬜ is a **known gap or accepted residual risk**: it is expected to still be present, so please do not raise it as a new defect.
 
-### ✅ Fixed in code (redeploy required to reach users)
+### ✅ Fixed and deployed
 
 | App | Issue | Fix | Commit |
 |---|---|---|---|
 | **Job Agent** | `POST /api/cv/check` took a caller-supplied `path` and passed it unvalidated to the file reader, returning extracted emails/URLs **and an AI summary of the file contents**. A logged-in user could read arbitrary server files such as `.env`. | Path is now resolved against the caller's own CV folder and must resolve inside it; `..`, absolute paths and symlinks are rejected (403), missing file 404. | `5d23eae` |
 | **MoneyPortfolio** | No attempt limit on the 4-digit vault PIN. | Escalating persisted lockout (1 min → 4 h), PBKDF2 raised 100k → 600k with safe migration of the existing vault, minimum PIN for new/changed PINs raised to 6 digits. | `ca5c1b4` |
+| **MoneyPortfolio** | Temporary passwords were shown via `alert()` and left in the DOM in a `data-password` attribute. | Both flows (admin create-user and household invite) now use one masked overlay: bulleted until **Reveal**, copyable without exposing it, cleared from the DOM and memory on dismiss. No `alert()`, no `data-password`. | `87d9a43` |
+| **MoneyPortfolio** | Self-registration was open on a system intended to be private. | `POST /api/auth/register` now returns **403** unless `ALLOW_SELF_REGISTRATION=true`; the sign-in screen hides the register link to match. Only exception: while the user table is empty the first account may still be created and becomes the administrator. | `87d9a43` |
+| **MoneyPortfolio** | Auto-export silently wrote **unencrypted** `.xlsx` financial data to Downloads. | Auto-export is now **off by default** and enabling it requires confirming that the workbook is written unencrypted. | `87d9a43` |
 | **Junior Playhouse** | **"Choose this plan" granted premium with no payment step.** | No payment integration exists at all, so the feature was kept but gated: plan buttons require the existing owner unlock (Parent Zone → ⚙️ App). | `5e728b1` |
 | **Junior Playhouse** | Paint **Clear** and Parent Zone **Remove {name}** destroyed data with no confirmation. | New `ConfirmDialog` on both, child-friendly wording, safe option first, Android back = cancel. | `5e728b1` |
 | **Junior Playhouse** | Parental-gate lockout reset by leaving the screen. | Lockout persisted to AsyncStorage with corrupt-value, expiry and backwards-clock handling, plus a live countdown. | `5e728b1` |
+| **Junior Playhouse** | **No audio anywhere** — ABC Phonics had no letter sounds, Melody Match no instrument notes. | Letter sounds via `speechSynthesis` and instrument notes via a Web Audio oscillator, so no binary assets were added. New **Parent Zone → Safety → "Game sounds"** toggle. Test count 162 → 179. | `15aa52f` |
+| **Junior Playhouse** | Coach-card instructions **contradicted the actual game rules** in Little Chef, Story Steps and Basket Catch. | All **6** contradictions corrected. In every case the code was right and the card text was wrong, so the cards were rewritten to match the implemented rules. | `15aa52f` |
 | **Voyagr** | AI-extracted **interests, pace and budget** were parsed, shown as "understood", then silently discarded — the itinerary ignored them. | `TripForm` now seeds these three from `prefill` like the other fields; unrecognised values fall back safely. 2 regression tests added. | `65543ce` |
 | **SmashPoint** | `EXPO_PUBLIC_APP_URL` fell back to the dead `smashpoint-badminton.surge.sh`, so share/invite links and QR codes pointed at a stale host when the env var was unset. | Fallback now `https://smashpoint.kran-apps.cloud`; 7 occurrences replaced across app, Supabase functions and docs. | `3d09d01` |
+| **Chessary** | Lenient FEN parser accepted **kingless / malformed positions**. | New `src/engine/fen.ts` performs structural *and* semantic validation (variant-aware) with a specific message per failure. One genuinely illegal FEN already committed in the repo was found and corrected. 1197 tests pass. | `2a5917d` |
+| **Chessary** | No URL router — browser **Back did not change tabs** and exited the app. | Hash router (`src/state/useHashRoute.ts`): tabs are addressable, Back/Forward move between them, and a URL can be shared or bookmarked. | `2a5917d` |
+| **Kangra Dham** | Canonical URLs used the **raw IP address** on 9 pages. | Every one of the 11 public pages is now self-canonical on `https://kangradham.kran-apps.cloud/<page>`; `corporate.html` and `stories.html` added to the sitemap (9 → 11 URLs). | `3c6ac33` |
+| **Kangra Dham** | **₹200 vs ₹299** hero price conflict, and catering vs corporate prices that looked contradictory. | Unlimited thali is **₹299** site-wide, on all seven days. Corporate (₹200–₹250/meal) and catering (₹159–₹179/thali) are retained but now explicitly labelled as **different services**, on `corporate.html`, `about.html` and `catering.html`. | `3c6ac33` |
+| **Kangra Dham** | Stale **"Kangra Dham Express"** branding, empty social-link containers, `offline.html` served as the 404 page, a **Sector 62** footer on `menu.html`, and fake "coming soon" gallery tiles. | All removed or corrected: real `404.html` added and the server fallback repointed, `offline.html` kept for PWA use and now actually precached (cache v5 → v6), footer corrected to Sector 137, gallery placeholders removed and image credits corrected. | `3c6ac33` |
 
-**Verification note:** test SP-352 and VY-C-29 should now **pass**. If they fail on the live site, the cause is almost certainly that the app has not been redeployed, not a code defect.
+### ⬜ Known gaps and accepted residual risks
 
-### ⬜ Still outstanding — security & data safety
+These are **expected**. They are listed so you can recognise them and move on rather than re-reporting them.
 
-| App | Issue | Why it matters |
+| App | Residual | Note |
 |---|---|---|
-| **MoneyPortfolio** | Offline brute force of a **copied vault blob** is still possible. 600k PBKDF2 iterations raise the cost only ~6×; the 6-digit minimum PIN is the real improvement, and **existing shorter PINs still work**. | Change your PIN to 6+ digits to actually benefit. |
-| **MoneyPortfolio** | Temporary passwords rendered via `alert()` / in the DOM. | Credentials land in screenshots and browser history. |
-| **MoneyPortfolio** | Self-registration may be open on a system intended to be private. | Strangers could create accounts. **Confirm intended behaviour.** |
-| **MoneyPortfolio** | Auto-export writes **unencrypted** `.xlsx` financial data to Downloads. | Plaintext financial data at rest. |
-| **MoneyPortfolio** | On-device DevTools tampering can clear the local PIN guard (the server copy restores it on reload). | Accepted residual risk. |
+| **MoneyPortfolio** | Offline brute force of a **copied vault blob** is still possible. | 600k PBKDF2 iterations raise the cost only ~6×; the 6-digit minimum is the real improvement, and **existing shorter PINs still work**. Change your PIN to 6+ digits to benefit. |
+| **MoneyPortfolio** | An **opted-in** auto-export is still a plaintext `.xlsx`. | The bundled SheetJS build can read password-protected workbooks but cannot write them, so encryption was not possible without adding a dependency. Delete exported files after testing. |
+| **MoneyPortfolio** | `GET /api/config` reveals whether the instance currently has **zero accounts**. | Only relevant if the database is ever emptied, after which the next visitor could claim the admin account. |
+| **MoneyPortfolio** | On-device DevTools tampering can clear the local PIN guard. | The server copy restores it on reload. Accepted. |
+| **Junior Playhouse** | The new audio is **web-only**. | It uses `speechSynthesis` and Web Audio, so the **Android APK stays silent**. Also **untested on iOS Safari**. |
+| **Chessary** | Pressing **Back** in the middle of a game discards an unfinished local game. | The router changes tab; it does not persist in-progress play. |
+| **Chessary** | FEN strings reaching the `server/` code paths are still **unvalidated**. | Only the client-side entry points were hardened. |
+| **Voyagr** | The prefill callout still says "cities, dates and travellers". | It now also applies interests, pace and budget — wording only. |
+| **Voyagr** | **No password reset** exists. | Not implemented. |
+| **Kangra Dham** | Hindi coverage is **partial**; a **personal Gmail** address is still published; two camera-icon placeholder slots remain in the `about.html` heritage section. | The Gmail address was deliberately left alone at the owner's instruction. The placeholder slots need real photos or a design decision — removing them breaks that card layout. |
+| **SmashPoint** | The `surge` devDependency is still in `package.json`/lockfile and `.github/copilot-instructions.md` still describes a Surge deployment policy. | Cosmetic / housekeeping only; production no longer uses Surge. |
 
-### ⬜ Still outstanding — functional & content
-
-| App | Issue |
-|---|---|
-| **Junior Playhouse** | **No audio anywhere** — ABC Phonics has no letter sounds, Melody Match no instrument sounds. Significant for a children's app. |
-| **Junior Playhouse** | Coach-card instructions **contradict actual game rules** in Little Chef, Story Steps and Basket Catch. |
-| **Chessary** | Lenient FEN parser accepts **kingless / malformed positions**. |
-| **Chessary** | No URL router — browser **Back does not change tabs** and exits the app. |
-| **Voyagr** | Prefill callout still says "cities, dates and travellers" although it now also applies interests, pace and budget. |
-| **Voyagr** | No password reset exists. |
-| **Kangra Dham** | ~~Canonical URLs use the **raw IP address** on 9 pages.~~ Fixed — every page is self-canonical on `https://kangradham.kran-apps.cloud`. |
-| **Kangra Dham** | ~~**₹200 vs ₹299** hero price conflict; catering vs corporate price conflict.~~ Fixed — unlimited thali is ₹299 site-wide; corporate (₹200–₹250/meal) and catering (₹159–₹179/thali) are now explicitly labelled as different services. |
-| **Kangra Dham** | ~~Stale **"Kangra Dham Express"** branding in WhatsApp text; empty social links; `offline.html` served as the 404 page; Sector 62 footer on `menu.html`; gallery placeholders.~~ All fixed. Still open: partial Hindi; personal Gmail address (owner's decision). |
-| **SmashPoint** | `surge` devDependency still present in `package.json`/lockfile; `.github/copilot-instructions.md` still describes a Surge deployment policy. |
 
 ### Configuration to confirm before testing
 
@@ -330,6 +332,7 @@ These were found by **reading the source code**, before any testing began.
 | **BhoomiPlan** | Live config has `online_payment: false` and `tax_percent: 0`, so **all upgrades must return 402** and no GST row should ever appear. |
 | **BhoomiPlan** | Free plan hard-stops at **25 units** and each plan costs 2 — metered tests are rationed. |
 | **Chessary** | The engine is a **bespoke alpha-beta worker, not Stockfish** — do not judge it by Stockfish strength. |
+| **Kangra Dham** | The live menu is served from the **SQLite `settings` table**, which is seeded from `data/menu.json` only on first run. Editing `data/menu.json` alone does **not** change the live menu — the stored setting has to be refreshed too (done 19 Oct 2026). If `/api/menu` and the static pages ever disagree, this is why. |
 
 ---
 
