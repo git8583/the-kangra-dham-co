@@ -197,6 +197,55 @@ ul {
     margin-right: auto;
 }
 
+/* Local directory */
+.directory {
+    max-width: 860px;
+}
+
+.directory-intro {
+    margin-bottom: 1.5rem;
+}
+
+.directory-filters:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1rem;
+}
+
+.directory-status {
+    margin-bottom: 1rem;
+}
+
+.directory-card, .directory-empty {
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-card);
+}
+
+.directory-card + .directory-card {
+    margin-top: 1rem;
+}
+
+.directory-card h2 {
+    color: var(--color-primary-dark);
+    font-family: var(--font-heading);
+}
+
+.directory-card p + p, .directory-empty .btn {
+    margin-top: 0.75rem;
+}
+
+.directory-category {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.directory-card a {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
 /* Utility */
 .text-center { text-align: center; }
 .mt-2 { margin-top: 2rem; }

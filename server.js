@@ -227,7 +227,7 @@ app.put('/api/admin/menu', requireAdmin, requireCsrf, (req, res) => {
 
 const allowedRootFiles = new Set([
     'index.html', 'about.html', 'admin.html', 'catering.html', 'contact.html', 'corporate.html',
-    'gallery.html', 'locations.html', 'menu.html', 'offline.html', 'order.html', 'stories.html',
+    'directory.html', 'gallery.html', 'locations.html', 'menu.html', 'offline.html', 'order.html', 'stories.html',
     'privacy.html', '404.html', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js', 'favicon.svg', 'favicon.ico'
 ]);
 app.use('/css', express.static(path.join(ROOT, 'css'), { maxAge: IS_PRODUCTION ? '1h' : 0 }));

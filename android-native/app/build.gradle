@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+}
+
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import javax.swing.text.html.HTML
+import javax.swing.text.html.parser.ParserDelegator
+import javax.swing.text.html.HTMLEditorKit
+
+android {
+    namespace 'co.thekangradham.nativeapp'
+    compileSdk 35
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    defaultConfig {
+        applicationId 'co.thekangradham.nativeapp'
+        minSdk 23
+        targetSdk 35
+        versionCode 1
+        versionName '0.1-incomplete'
+    }
+
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/menuAssets')
+}
+
+tasks.register('copyBundledMenu', Copy) {
+    from '../../data/menu.json'
+    into layout.buildDirectory.dir('generated/menuAssets')
+}
+
+tasks.register('extractPageContent') {
+    def pages = ['index', 'about', 'stories', 'corporate', 'catering', 'privacy', 'gallery']
+    inputs.files(pages.collect { file("../../${it}.html") })
+    def output = layout.buildDirectory.file('generated/menuAssets/pages.json')
+    outputs.file(output)
+    doLast {
+        def allPages = [:]
+        pages.each { page ->
+            String html = file("../../${page}.html").getText('UTF-8')
+            int start = html.indexOf('<main ')
+            int end = html.indexOf('</main>', start)
+            if (start < 0 || end < 0) throw new GradleException("Missing main content: ${page}")
+            String main = html.substring(start, end)
+            def blocks = []
+            def captured = [HTML.Tag.H1, HTML.Tag.H2, HTML.Tag.H3, HTML.Tag.H4, HTML.Tag.P, HTML.Tag.LI]
+            def current = [tag: null, text: new StringBuilder()]
+            def callback = new HTMLEditorKit.ParserCallback() {
+                void handleStartTag(HTML.Tag tag, javax.swing.text.MutableAttributeSet attrs, int pos) {
+                    def style = String.valueOf(attrs.getAttribute(HTML.Attribute.STYLE))
+                    def cssClass = String.valueOf(attrs.getAttribute(HTML.Attribute.CLASS))
+                    boolean price = (tag == HTML.Tag.DIV && style.contains('font-size: 2rem')) ||
+                            (tag == HTML.Tag.SPAN && cssClass == 'price')
+                    if (current.tag == null && (captured.contains(tag) || price)) {
+                        current.tag = tag
+                        current.text = new StringBuilder()
+                    }
+                }
+                void handleText(char[] data, int pos) {
+                    if (current.tag != null) current.text.append(data)
+                }
+                void handleEndTag(HTML.Tag tag, int pos) {
+                    if (tag == current.tag) {
+                        def text = current.text.toString().replaceAll(/\s+/, ' ').trim()
+                        if (!text.isEmpty()) blocks << [type: tag.toString(), text: text]
+                        current.tag = null
+                    }
+                }
+            }
+            new ParserDelegator().parse(new StringReader(main), callback, true)
+            def images = []
+            if (page == 'gallery') {
+                def matches = main =~ /(?s)background-image:\s*url\('([^']+)'\).*?gallery-item-overlay">([^<]+)</
+                matches.each { match -> images << [url: match[1], caption: match[2].replace('&amp;', '&')] }
+            } else if (page == 'about' || page == 'index') {
+                def matches = main =~ /background-image:\s*url\('([^']+)'\)/
+                matches.each { match -> images << [url: match[1], caption: 'Illustrative photograph'] }
+            }
+            allPages[page] = [blocks: blocks, images: images]
+        }
+        def target = output.get().asFile
+        target.parentFile.mkdirs()
+        target.setText(JsonOutput.toJson(allPages), 'UTF-8')
+    }
+}
+tasks.named('preBuild').configure { dependsOn 'copyBundledMenu', 'extractPageContent' }
+
+tasks.register('verifyPageContent') {
+    dependsOn 'extractPageContent'
+    doLast {
+        def pages = new JsonSlurper().parse(layout.buildDirectory.file('generated/menuAssets/pages.json').get().asFile)
+        ['index', 'about', 'stories', 'corporate', 'catering', 'privacy', 'gallery'].each {
+            if (!pages[it].blocks.any { block -> block.type == 'h1' } || pages[it].blocks.size() < 3) {
+                throw new GradleException("Incomplete native content: ${it}")
+            }
+        }
+        ['₹200–₹250', '₹1,099', '₹3,999'].each { price ->
+            if (!pages.corporate.blocks.any { it.text.contains(price) }) {
+                throw new GradleException("Missing corporate price: ${price}")
+            }
+        }
+        ['₹179', '₹169', '₹159'].each { price ->
+            if (!pages.catering.blocks.any { it.text.contains(price) }) {
+                throw new GradleException("Missing catering price: ${price}")
+            }
+        }
+        if (pages.gallery.images.size() != 9 || pages.gallery.images.any { !it.url || !it.caption }) {
+            throw new GradleException('Gallery images or captions missing')
+        }
+    }
+}
+tasks.configureEach {
+    if (name == 'testDebugUnitTest') dependsOn 'verifyPageContent'
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20240303'
+}

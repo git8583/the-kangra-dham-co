@@ -1,7 +1,7 @@
 // The Kangra Dham Co. - Service Worker
 // Provides offline support and caching
 
-const CACHE_NAME = 'kangra-dham-v6';
+const CACHE_NAME = 'kangra-dham-v7';
 const OFFLINE_URL = 'offline.html';
 
 const PRECACHE_URLS = [
@@ -9,10 +9,13 @@ const PRECACHE_URLS = [
     'index.html',
     'menu.html',
     'about.html',
+    'directory.html',
     'privacy.html',
     'offline.html',
     'css/style.css',
     'js/main.js',
+    'js/security.js',
+    'js/directory.js',
     'js/menu-data.js',
     'js/analytics.js',
     'manifest.json',

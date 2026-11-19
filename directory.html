@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse local resources in Sector 137, Noida.">
+    <title>Local Directory | The Kangra Dham Co.</title>
+    <link rel="canonical" href="https://kangradham.kran-apps.cloud/directory.html">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B85B35">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍛</span>
+                <span class="logo-text"><span class="logo-main">The Kangra Dham</span><span class="logo-sub">Co.</span></span>
+            </a>
+            <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">Our Heritage</a></li>
+                <li><a href="menu.html">The Menu</a></li>
+                <li><a href="locations.html">Find Us</a></li>
+                <li><a href="catering.html">Catering</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="corporate.html">Corporate</a></li>
+                <li><a href="stories.html">Stories</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="order.html" class="btn-nav">Order Now</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main id="main-content">
+        <section class="page-header">
+            <h1>Local Directory</h1>
+            <p>Practical information for Sector 137, Noida</p>
+        </section>
+        <section class="section">
+            <div class="container directory">
+                <p class="directory-intro">This small directory currently includes only our own location. Other local services and community resources have not yet been added. Please confirm details before visiting.</p>
+                <div id="directoryFilters" class="directory-filters" hidden>
+                    <div class="form-group">
+                        <label for="directorySearch">Search listings</label>
+                        <input id="directorySearch" type="search" placeholder="Search by name, location or service">
+                    </div>
+                    <div class="form-group">
+                        <label for="directoryCategory">Category</label>
+                        <select id="directoryCategory">
+                            <option value="all">All categories</option>
+                            <option value="food">Food &amp; drink</option>
+                        </select>
+                    </div>
+                </div>
+                <p id="directoryStatus" class="directory-status" role="status" aria-live="polite"></p>
+                <div id="directoryListings">
+                    <article class="directory-card" data-category="food">
+                        <p class="directory-category">Food &amp; drink</p>
+                        <h2>The Kangra Dham Co.</h2>
+                        <p>Dine-in, takeaway and bulk pickup</p>
+                        <p><strong>Address:</strong> Retail Arcade, Sector 137 (Opp. Metro Station), Noida Expressway</p>
+                        <p><strong>Hours:</strong> Lunch: 12:00 PM – 3:30 PM; Evening Snacks &amp; Chai: 4:30 PM – 6:30 PM; Dinner: 7:30 PM – 10:00 PM</p>
+                        <p><strong>Phone:</strong> <a href="tel:+917011376087">+91&nbsp;7011376087</a></p>
+                        <p><a href="locations.html">More location details</a></p>
+                    </article>
+                </div>
+                <div id="directoryEmpty" class="directory-empty" hidden>
+                    <p>No listings match your search and category. Try a different search or clear the filters.</p>
+                    <button id="directoryClear" type="button" class="btn btn-secondary btn-small">Clear filters</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 The Kangra Dham Co. &middot; <a href="privacy.html">Privacy</a> &middot; <a href="locations.html">Find Us</a></p>
+        </div>
+    </footer>
+    <script src="js/security.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/directory.js"></script>
+</body>
+</html>
